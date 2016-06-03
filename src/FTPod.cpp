@@ -7,13 +7,14 @@
 
 #include "FTPod.h"
 
-FTPod::FTPod()
+FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin)
 {
 	//Instantiate main objects
 	Com = new FTCom();
 	Clock = new FTClock();
-	Score = new FTScore();	
-  	Motor = new FTMotor();
+	Score = new FTScore();
+  	Motor = new FTMotor(motorDirPin,motorStepPin);
+  	Sensor = new FTSensor(sensorPin,ledPin);
   	Synth = new FTSynth();
 }
 
@@ -21,11 +22,14 @@ void FTPod::update() {
 	//Update Com
 	Com->update();
 
-	//Update Score
-	Score->update();
+	//Update Sensor
+	Sensor->update();
 
 	//Update Clock
 	Clock->update();
+
+	//Update Score
+	Score->update();
 
 	//Update Motor
 	Motor->update();

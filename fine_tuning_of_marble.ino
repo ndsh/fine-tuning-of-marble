@@ -25,12 +25,12 @@ FTPod* Pod;
 void setup() {
   //Setup Pins
   pinMode(SENSOR_PIN, INPUT_PULLDOWN);
+  pinMode(LED_PIN, OUTPUT);
   pinMode(MOTOR_DIR_PIN, OUTPUT);
   pinMode(MOTOR_STEP_PIN, OUTPUT);
-  pinMode(LED_PIN, OUTPUT);
 
   //Create Pod
-  Pod = new FTPod();
+  Pod = new FTPod(SENSOR_PIN,LED_PIN,MOTOR_DIR_PIN,MOTOR_STEP_PIN);
   
   //Init Delay
   delay(INIT_DELAY);
@@ -40,5 +40,4 @@ void loop() {
   //Update Pod
   Pod->update();
 }
-
 

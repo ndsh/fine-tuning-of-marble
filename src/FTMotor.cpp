@@ -7,11 +7,18 @@
 
 #include "FTMotor.h"
 
-FTMotor::FTMotor()
+FTMotor::FTMotor(int stepPin, int dirPin)
 {
-	
+	//Configure stepper
+	stepper = new AccelStepper(AccelStepper::FULL2WIRE, stepPin, dirPin);
+	stepper->setMaxSpeed(MAXSPEED);
+  	stepper->setSpeed(0);
+  	mSpeed = 0;
+  	stepper->setCurrentPosition(0);
 }
 
 void FTMotor::update() {
-
+	//Move motor
+	stepper->setSpeed(mSpeed);
+	stepper->runSpeedToPosition();
 }

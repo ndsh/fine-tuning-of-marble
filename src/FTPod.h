@@ -13,6 +13,7 @@
 #include "FTScore.h"
 #include "FTClock.h"
 #include "FTMotor.h"
+#include "FTSensor.h"
 #include "FTSynth.h"
 #include "FTCom.h"
 
@@ -22,18 +23,16 @@
 #include <Scale.h>
 #include <MacAddress.h>
 
-//Third-party Libraries
-#include <AccelStepper.h>
-
 class FTPod
 {
   public:
-    FTPod();
+    FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin);
     void update();
   private:
   	FTScore* Score = nullptr;
   	FTClock* Clock = nullptr;
   	FTMotor* Motor = nullptr;
+  	FTSensor* Sensor = nullptr;
   	FTSynth* Synth = nullptr;
   	FTCom* Com = nullptr;
 };

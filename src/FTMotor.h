@@ -9,9 +9,9 @@
 #define FTMotor_h
 
 //Definitions
-#define MAXSPEED 20000
+#define MAXSPEED 18000
 #define MINSPEED 100
-#define FULLREVOLUTION 25600
+#define FULLREV 25600
 
 //AccelStepper Library
 #include <AccelStepper.h>
@@ -19,11 +19,28 @@
 class FTMotor
 {
   public:
-    FTMotor(int stepPin, int dirPin);
+
+  	FTMotor(int stepPin, int dirPin);
+
+  	AccelStepper* stepper = nullptr;
+    int mSpeed;
+  	int mCurveIn;
+  	int mCurveOut;
+  	int mMaxSpeedFactor;
+  	bool mIsConstant;
+
     void update();
-    AccelStepper* stepper = nullptr;
+    void rotate(float times,int direction);
+    void moveTo(long absolutePos, int direction);
+    void stop();
+    void setConstantSpeed(float speedFactor);
+    void setSpeedCurve(float in, float out, float maxSpeedLimiter);
+
   private:
-  	int mSpeed;
+
+  	long getRelativePos(long absolutePos, int direction);
+  	int getCurrentSpeed();
+
 };
 
 #endif

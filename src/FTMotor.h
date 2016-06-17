@@ -10,7 +10,7 @@
 
 //Definitions
 #define MAXSPEED 18000
-#define MINSPEED 100
+#define MINSPEED 200
 #define FULLREV 25600
 
 //AccelStepper Library
@@ -22,25 +22,29 @@ class FTMotor
 
   	FTMotor(int stepPin, int dirPin);
 
-  	AccelStepper* stepper = nullptr;
-    int mSpeed;
-  	int mCurveIn;
-  	int mCurveOut;
-  	int mMaxSpeedFactor;
-  	bool mIsConstant;
+  	AccelStepper* mStepper = nullptr; //Main stepper instance
+    float mSpeed; //Contains current motor speed
+    float mRangeIn; //Contains the current length of the "IN" motion of the motor in acceleration mode.
+    float mRangeOut;  //Contains the current length of the "OUT" motion of the motor in acceleration mode.
+    float mMaxSpeedFactor;  //Limits the max speed of the motor in acceleration mode.
+  	bool mIsConstant;  //Flag for checking wether the motor is at contant speed mode or accelerating.
 
     void update();
     void rotate(float times,int direction);
-    void moveTo(long absolutePos, int direction);
+    void runTo(long relativePos, int direction);
     void stop();
     void setConstantSpeed(float speedFactor);
-    void setSpeedCurve(float in, float out, float maxSpeedLimiter);
+    void setAccelSpeed(float in, float out, float maxSpeedLimiter);
 
   private:
-
-  	long getRelativePos(long absolutePos, int direction);
-  	int getCurrentSpeed();
-
+    long mLastPos; //Contains the last relative position before starting movement.
+    long mTargetPos; //Contains the target position (in motion).
+    long mTargetDistance; //Contains the distance to go to a certain position.
+  	long getNewRelativePosition(long newAbsolutePos, int direction);
+    long getAbsoluteDistance(long lastPos, long newPos);
+  	void updateSpeed();
 };
 
 #endif
+
+

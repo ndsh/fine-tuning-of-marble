@@ -7,18 +7,18 @@
 */
 
 //Definitions
-
 #define SENSOR_PIN A0
 #define MOTOR_DIR_PIN 3
 #define MOTOR_STEP_PIN 4
 #define LED_PIN 5
-#define INIT_DELAY 100
+#define INIT_DELAY 1000
+#define DEBUG false
 
 //Main Include
 #include "src/FTPod.h"
 
 //Instances
-FTPod* Pod;
+FTPod* Pod;   
 
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
@@ -34,10 +34,12 @@ void setup() {
   
   //Init Delay
   delay(INIT_DELAY);
+  if(DEBUG) Serial.println("INIT");
 }
 
 void loop() {
   //Update Pod
   Pod->update();
 }
+
 

@@ -15,8 +15,12 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 	Score = new FTScore();
   	Motor = new FTMotor(motorDirPin,motorStepPin);
   	Sensor = new FTSensor(sensorPin,ledPin);
-  	Synth = new FTSynth();  	
+  	Synth = new FTSynth();
 }
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	Public
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 void FTPod::update() {
 	//Update Com
@@ -32,30 +36,16 @@ void FTPod::update() {
 	Score->update();
 
 	//Update Motor
+	
+	//Example random movement:
+	if (!Motor->isMoving())
+	{
+      	Motor->setAccelSpeed(0.14,0.14,1);
+ 		Motor->runTo(random(25600),random(-1,1),0);
+	}
+
 	Motor->update();
 
 	//Update Synth
 	Synth->update();
 }
-
-/*
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Motor -> usage examples
- 
- #Rotate two times, in half of constant speed, clockwise
- Motor->setConstantSpeed(0.5);
- Motor->rotate(2,1);
-
- #Rotate two times, with acceleration, half ramp both IN and OUT, full max speed
- Motor->setAccelSpeed(0.5,0.5,1);
- Motor->rotate(2,1);
-
- #Run to an absolute position, clockwise, with acceleration, half ramp both IN and OUT, full max speed
- Motor->setAccelSpeed(0.5,0.5,1);
- Motor->runTo(40000,1);
-
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-*/
-
-
-

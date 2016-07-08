@@ -28,6 +28,7 @@ class FTPod
   public:
     FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin);
     void update();
+
   private:
   	FTScore* Score = nullptr;
   	FTClock* Clock = nullptr;

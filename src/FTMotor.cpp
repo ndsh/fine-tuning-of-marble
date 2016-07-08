@@ -46,13 +46,24 @@ void FTMotor::rotate(float rotations,int direction)
 	mStepper->moveTo(mTargetPos);
 }
 
-void FTMotor::runTo(long absolutePos, int direction)
+void FTMotor::runTo(long absolutePos, int direction, int rotations)
 {
 	//Direction = -1 counterclockwise, 0 the closest, 1 clockwise
 	mLastPos = mStepper->currentPosition();
-	mTargetPos = getNewRelativePosition(absolutePos,direction);
+	mTargetPos = getNewRelativePosition(absolutePos,direction,rotations);
 	mTargetDistance = getAbsoluteDistance(mLastPos,mTargetPos);
 	mStepper->moveTo(mTargetPos);
+
+	if (DEBUG)
+	{
+		Serial.print("FTMotor -> runTo: ");
+		Serial.print("mLastPos: ");
+		Serial.print(mLastPos);
+		Serial.print(" mTargetPos: ");
+		Serial.print(mTargetPos);
+		Serial.print(" mTargetDistance: ");
+		Serial.println(mTargetDistance);
+	}
 }
 
 void FTMotor::stop()
@@ -80,36 +91,54 @@ void FTMotor::setAccelSpeed(float in, float out, float maxSpeedLimiter)
 	mMaxSpeedFactor = maxSpeedLimiter;
 }
 
+bool FTMotor::isMoving()
+{
+	if (mStepper->distanceToGo() == 0)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	Private
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-long FTMotor::getNewRelativePosition(long newAbsolutePos, int direction)
+long FTMotor::getNewRelativePosition(long newAbsolutePos, int direction, int rotations)
 {
 	//Calculates a relative position to an absolute one (0 to FULLREV)
 	long newRelativePos = 0;
 	long currentRelativePos = mStepper->currentPosition();
-	long currentAbsolutePos	= currentRelativePos % FULLREV;
-	int currentRevolutions = currentRelativePos / FULLREV;
+	//long currentAbsolutePos	= currentRelativePos % FULLREV;
+	int currentRevolutions = (int) currentRelativePos / FULLREV;
 
 	newRelativePos = (currentRevolutions * FULLREV) + newAbsolutePos;
 
 	switch (direction){
 		case -1:
 		//CCW
-		if (newRelativePos > currentAbsolutePos)
+		if (currentRelativePos < 0)
 		{
-			//FIX FOLLOWING:
-			newRelativePos -= FULLREV;
+			newRelativePos -= (FULLREV*2);
 		}
+		else
+		{
+			newRelativePos -= (FULLREV);
+		}
+		newRelativePos -= (FULLREV * rotations);
+		break;
+
+		case 0:
+		newRelativePos += FULLREV * rotations;
 		break;
 
 		case 1:
 		//CW
-		if (newRelativePos < currentAbsolutePos)
-		{
-			newRelativePos += FULLREV;
-		}
+		newRelativePos += FULLREV;
+		newRelativePos += (FULLREV * rotations);
 		break;
 	}
 
@@ -119,14 +148,7 @@ long FTMotor::getNewRelativePosition(long newAbsolutePos, int direction)
 long FTMotor::getAbsoluteDistance(long lastPos, long newPos)
 {
 	long distance;
-	if (lastPos > newPos)
-	{
-		distance = lastPos - newPos;
-	}
-	else
-	{
-		distance = newPos - lastPos;
-	}
+	distance = newPos - lastPos;
 	return distance;
 }
 
@@ -139,7 +161,7 @@ void FTMotor::updateSpeed()
 	long posIN = mLastPos + (mTargetDistance * mRangeIn * 0.5);
 	long posOUT = (mTargetDistance + mLastPos) - (mTargetDistance * mRangeOut * 0.5);
 
-	if (mLastPos > mTargetDistance)
+	if (mLastPos > mTargetPos)
   	{
     	//Going backwards
     	if (currentPos >= posIN)
@@ -152,7 +174,7 @@ void FTMotor::updateSpeed()
       		if (currentPos <= posOUT)
       		{
         		//OUT Ramp
-        		newSpeed = map(currentPos, posOUT, mTargetDistance, mMaxSpeed, MINSPEED);
+        		newSpeed = map(currentPos, posOUT, mTargetPos, mMaxSpeed, MINSPEED);
       		}
       		else
       		{
@@ -174,7 +196,7 @@ void FTMotor::updateSpeed()
       		if (currentPos >= posOUT)
       		{
         		//OUT Ramp
-        		newSpeed = map(currentPos, posOUT, mTargetDistance, mMaxSpeed, MINSPEED);
+        		newSpeed = map(currentPos, posOUT, mTargetPos, mMaxSpeed, MINSPEED);
       		}
       		else
       		{
@@ -191,9 +213,28 @@ void FTMotor::updateSpeed()
   	}
 
 	mSpeed = newSpeed;
+
+	/*
+	if (DEBUG)
+	{
+		
+		Serial.print("FTMotor -> updatedSpeed: ");
+		Serial.print("mLastPos: ");
+		Serial.print(mLastPos);
+		Serial.print(" mTargetPos: ");
+		Serial.print(mTargetPos);
+		Serial.print(" mTargetDistance: ");
+		Serial.print(mTargetDistance);
+		Serial.print("currentPos: ");
+		Serial.print(currentPos);
+		Serial.print(" posIN: ");
+		Serial.print(posIN);
+		Serial.print(" posOUT: ");
+		Serial.print(posOUT);
+		Serial.print(" newSpeed: ");
+		Serial.println(newSpeed);
+	}
+	*/
 }
-
-
-
 
 

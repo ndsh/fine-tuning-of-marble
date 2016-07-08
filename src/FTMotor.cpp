@@ -54,7 +54,7 @@ void FTMotor::runTo(long absolutePos, int direction, int rotations)
 	mTargetDistance = getAbsoluteDistance(mLastPos,mTargetPos);
 	mStepper->moveTo(mTargetPos);
 
-	if (DEBUG)
+	if (DEBUG_Motor)
 	{
 		Serial.print("FTMotor -> runTo: ");
 		Serial.print("mLastPos: ");
@@ -215,7 +215,7 @@ void FTMotor::updateSpeed()
 	mSpeed = newSpeed;
 
 	/*
-	if (DEBUG)
+	if (DEBUG_Motor)
 	{
 		
 		Serial.print("FTMotor -> updatedSpeed: ");

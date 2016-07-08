@@ -31,7 +31,7 @@
 #define MAXSPEED 18000
 #define MINSPEED 200
 #define FULLREV 25600
-#define DEBUG true
+#define DEBUG_Motor false
 
 //AccelStepper Library
 #include <AccelStepper.h>
@@ -61,6 +61,7 @@ class FTMotor
     long mLastPos; //Contains the last relative position before starting movement.
     long mTargetPos; //Contains the target position (in motion).
     long mTargetDistance; //Contains the distance to go to a certain position.
+
   	long getNewRelativePosition(long newAbsolutePos, int direction, int revolutions);
     long getAbsoluteDistance(long lastPos, long newPos);
   	void updateSpeed();

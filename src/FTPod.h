@@ -23,19 +23,32 @@
 #include <Scale.h>
 #include <MacAddress.h>
 
+//Definitions
+#define DEBUG_Pod false
+
 class FTPod
 {
   public:
+
     FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin);
+
     void update();
 
   private:
+
   	FTScore* Score = nullptr;
   	FTClock* Clock = nullptr;
   	FTMotor* Motor = nullptr;
   	FTSensor* Sensor = nullptr;
   	FTSynth* Synth = nullptr;
   	FTCom* Com = nullptr;
+
+    void receiveCom();
+    void setClock();
+    void conductScore();
+    void parseSensor();
+    void moveMotor();
+    void tuneSynth();
 };
 
 #endif

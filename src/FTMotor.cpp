@@ -7,7 +7,7 @@
 
 #include "FTMotor.h"
 
-FTMotor::FTMotor(int stepPin, int dirPin)
+FTMotor::FTMotor(int stepPin, int dirPin, long fullRevolution)
 {
 	//Configure stepper
 	mStepper = new AccelStepper(AccelStepper::FULL2WIRE, stepPin, dirPin);
@@ -41,7 +41,7 @@ void FTMotor::rotate(float rotations,int direction)
 	//Rotate the motor to times * full revolution.
 	//Direction = -1 counterclockwise, 1 clockwise
 	mLastPos = mStepper->currentPosition();
-	mTargetPos = mLastPos + (FULLREV * rotations * direction);
+	mTargetPos = mLastPos + (fullRev * rotations * direction);
 	mTargetDistance = getAbsoluteDistance(mLastPos,mTargetPos);
 	mStepper->moveTo(mTargetPos);
 }
@@ -109,36 +109,36 @@ bool FTMotor::isMoving()
 
 long FTMotor::getNewRelativePosition(long newAbsolutePos, int direction, int rotations)
 {
-	//Calculates a relative position to an absolute one (0 to FULLREV)
+	//Calculates a relative position to an absolute one (0 to fullRev)
 	long newRelativePos = 0;
 	long currentRelativePos = mStepper->currentPosition();
-	//long currentAbsolutePos	= currentRelativePos % FULLREV;
-	int currentRevolutions = (int) currentRelativePos / FULLREV;
+	//long currentAbsolutePos	= currentRelativePos % fullRev;
+	int currentRevolutions = (int) currentRelativePos / fullRev;
 
-	newRelativePos = (currentRevolutions * FULLREV) + newAbsolutePos;
+	newRelativePos = (currentRevolutions * fullRev) + newAbsolutePos;
 
 	switch (direction){
 		case -1:
 		//CCW
 		if (currentRelativePos < 0)
 		{
-			newRelativePos -= (FULLREV*2);
+			newRelativePos -= (fullRev*2);
 		}
 		else
 		{
-			newRelativePos -= (FULLREV);
+			newRelativePos -= (fullRev);
 		}
-		newRelativePos -= (FULLREV * rotations);
+		newRelativePos -= (fullRev * rotations);
 		break;
 
 		case 0:
-		newRelativePos += FULLREV * rotations;
+		newRelativePos += fullRev * rotations;
 		break;
 
 		case 1:
 		//CW
-		newRelativePos += FULLREV;
-		newRelativePos += (FULLREV * rotations);
+		newRelativePos += fullRev;
+		newRelativePos += (fullRev * rotations);
 		break;
 	}
 

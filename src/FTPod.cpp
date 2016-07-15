@@ -7,15 +7,18 @@
 
 #include "FTPod.h"
 
-FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin)
+FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, long fullRevolution)
 {
 	//Instantiate main objects
 	Com = new FTCom();
 	Clock = new FTClock();
 	Score = new FTScore();
-  	Motor = new FTMotor(motorDirPin,motorStepPin);
-  	Sensor = new FTSensor(sensorPin,ledPin);
+  	Motor = new FTMotor(motorDirPin,motorStepPin,fullRevolution);
+  	Sensor = new FTSensor(sensorPin,ledPin,fullRevolution);
   	Synth = new FTSynth();
+
+  	//Store key values
+  	fullRev = fullRevolution;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

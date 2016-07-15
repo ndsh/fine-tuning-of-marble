@@ -30,9 +30,11 @@ class FTPod
 {
   public:
 
-    FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin);
+    FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, long fullRevolution);
 
     void update();
+
+    long fullRev; //Keeping FULLREV value
 
   private:
 

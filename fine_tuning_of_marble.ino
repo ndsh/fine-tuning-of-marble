@@ -7,6 +7,7 @@
 */
 
 //Definitions
+#define FULLREV 25600
 #define SENSOR_PIN A0
 #define MOTOR_DIR_PIN 3
 #define MOTOR_STEP_PIN 4
@@ -30,7 +31,7 @@ void setup() {
   pinMode(MOTOR_STEP_PIN, OUTPUT);
 
   //Create Pod
-  Pod = new FTPod(SENSOR_PIN,LED_PIN,MOTOR_DIR_PIN,MOTOR_STEP_PIN);
+  Pod = new FTPod(SENSOR_PIN,LED_PIN,MOTOR_DIR_PIN,MOTOR_STEP_PIN,FULLREV);
   
   //Init Delay
   delay(INIT_DELAY);

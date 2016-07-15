@@ -30,7 +30,6 @@
 //Definitions
 #define MAXSPEED 18000
 #define MINSPEED 200
-#define FULLREV 25600
 #define DEBUG_Motor false
 
 //AccelStepper Library
@@ -40,7 +39,7 @@ class FTMotor
 {
   public:
 
-  	FTMotor(int stepPin, int dirPin);
+  	FTMotor(int stepPin, int dirPin, long fullRevolution);
 
   	AccelStepper* mStepper = nullptr; //Main stepper instance
     float mSpeed; //Contains current motor speed
@@ -61,6 +60,7 @@ class FTMotor
     long mLastPos; //Contains the last relative position before starting movement.
     long mTargetPos; //Contains the target position (in motion).
     long mTargetDistance; //Contains the distance to go to a certain position.
+    long fullRev; //Keeping FULLREV value 
 
   	long getNewRelativePosition(long newAbsolutePos, int direction, int revolutions);
     long getAbsoluteDistance(long lastPos, long newPos);

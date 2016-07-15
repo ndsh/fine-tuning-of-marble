@@ -7,7 +7,7 @@
 */
 
 //Definitions
-#define FULLREV 25600
+#define FULLREV 230400 //9:1 25600
 #define SENSOR_PIN A0
 #define MOTOR_DIR_PIN 3
 #define MOTOR_STEP_PIN 4
@@ -35,7 +35,9 @@ void setup() {
   
   //Init Delay
   delay(INIT_DELAY);
-  if(DEBUG) Serial.println("INIT");
+  #if DEBUG
+    Serial.println("INIT")
+  #endif
 }
 
 void loop() {

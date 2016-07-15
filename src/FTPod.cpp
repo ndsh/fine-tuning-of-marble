@@ -39,7 +39,6 @@ void FTPod::update() {
 	Score->update();
 
 	//Update Sensor
-	parseSensor();
 	Sensor->update();
 
 	//Update Motor
@@ -71,12 +70,6 @@ void FTPod::conductScore()
 	//Update the current FTPod state according to the current Score state.
 }
 
-void FTPod::parseSensor()
-{
-	//Update sensor arrays according to Score.
-}
-
-
 void FTPod::moveMotor()
 {
 	//Move the motor according to the Score and Sensor values.
@@ -84,7 +77,7 @@ void FTPod::moveMotor()
 	{		
 		//For now, an example of random movement:
 		Motor->setAccelSpeed(0.14,0.14,1);
- 		Motor->runTo(random(25600),random(-1,1),0);
+ 		Motor->runTo(random(fullRev),random(-1,1),0);
 	}
 }
 

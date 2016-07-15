@@ -24,7 +24,7 @@
 #include <MacAddress.h>
 
 //Definitions
-#define DEBUG_Pod false
+#define DEBUG_POD false
 
 class FTPod
 {
@@ -48,7 +48,6 @@ class FTPod
     void receiveCom();
     void setClock();
     void conductScore();
-    void parseSensor();
     void moveMotor();
     void tuneSynth();
 };

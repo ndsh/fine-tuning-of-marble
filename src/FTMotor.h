@@ -30,7 +30,7 @@
 //Definitions
 #define MAXSPEED 18000
 #define MINSPEED 200
-#define DEBUG_Motor false
+#define DEBUG_MOTOR false
 
 //AccelStepper Library
 #include <AccelStepper.h>

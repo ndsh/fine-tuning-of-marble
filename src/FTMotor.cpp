@@ -54,8 +54,7 @@ void FTMotor::runTo(long absolutePos, int direction, int rotations)
 	mTargetDistance = getAbsoluteDistance(mLastPos,mTargetPos);
 	mStepper->moveTo(mTargetPos);
 
-	if (DEBUG_Motor)
-	{
+	#if DEBUG_MOTOR
 		Serial.print("FTMotor -> runTo: ");
 		Serial.print("mLastPos: ");
 		Serial.print(mLastPos);
@@ -63,7 +62,7 @@ void FTMotor::runTo(long absolutePos, int direction, int rotations)
 		Serial.print(mTargetPos);
 		Serial.print(" mTargetDistance: ");
 		Serial.println(mTargetDistance);
-	}
+	#endif
 }
 
 void FTMotor::stop()
@@ -215,9 +214,7 @@ void FTMotor::updateSpeed()
 	mSpeed = newSpeed;
 
 	/*
-	if (DEBUG_Motor)
-	{
-		
+	#if DEBUG_MOTOR
 		Serial.print("FTMotor -> updatedSpeed: ");
 		Serial.print("mLastPos: ");
 		Serial.print(mLastPos);
@@ -233,7 +230,7 @@ void FTMotor::updateSpeed()
 		Serial.print(posOUT);
 		Serial.print(" newSpeed: ");
 		Serial.println(newSpeed);
-	}
+	#endif
 	*/
 }
 

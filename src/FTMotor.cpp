@@ -44,13 +44,22 @@ void FTMotor::rotate(float rotations,int direction)
 	mTargetPos = mLastPos + (fullRev * rotations * direction);
 	mTargetDistance = getAbsoluteDistance(mLastPos,mTargetPos);
 	mStepper->moveTo(mTargetPos);
+
+	#if DEBUG_MOTOR
+		Serial.print("FTMotor -> rotate: ");
+		Serial.print(rotations);
+		Serial.print("times / direction: ");
+		Serial.print(direction);
+		Serial.print(" / mTargetPos: ")
+		Serial.println(mTargetPos);
+	#endif
 }
 
 void FTMotor::runTo(long absolutePos, int direction, int rotations)
 {
 	//Direction = -1 counterclockwise, 0 the closest, 1 clockwise
 	mLastPos = mStepper->currentPosition();
-	mTargetPos = getNewRelativePosition(absolutePos,direction,rotations);
+	mTargetPos = getNewTargetRelativePosition(absolutePos,direction,rotations);
 	mTargetDistance = getAbsoluteDistance(mLastPos,mTargetPos);
 	mStepper->moveTo(mTargetPos);
 
@@ -70,6 +79,9 @@ void FTMotor::stop()
 	mLastPos = mStepper->currentPosition();
 	mIsConstant = true;
 	mSpeed = 0;
+	#if DEBUG_MOTOR
+		Serial.println("FTMotor -> stop() ");
+	#endif
 }
 
 void FTMotor::setConstantSpeed(float speedFactor)
@@ -77,6 +89,10 @@ void FTMotor::setConstantSpeed(float speedFactor)
 	//Linear constant speed of speedFactor (0 to 1) * MAXSPEED
 	mIsConstant = true;
 	mSpeed = MAXSPEED * speedFactor;
+	#if DEBUG_MOTOR
+		Serial.println("FTMotor -> setConstantSpeed: ");
+		Serial.println(mSpeed);
+	#endif
 }
 
 void FTMotor::setAccelSpeed(float in, float out, float maxSpeedLimiter)
@@ -88,6 +104,9 @@ void FTMotor::setAccelSpeed(float in, float out, float maxSpeedLimiter)
 	mRangeIn = in;
 	mRangeOut = out;
 	mMaxSpeedFactor = maxSpeedLimiter;
+	#if DEBUG_MOTOR
+		Serial.println("FTMotor -> setAccelSpeed() ");
+	#endif
 }
 
 bool FTMotor::isMoving()
@@ -102,19 +121,41 @@ bool FTMotor::isMoving()
 	}
 }
 
+long FTMotor::getCurrentAbsolutePosition()
+{
+	//Calculates an absolute position (0 to fullRev) relative to the current relative one
+	long currentRelativePos = mStepper->currentPosition();
+	int currentRevolutions = (int) currentRelativePos / fullRev;
+	long absolutePos = abs(currentRelativePos - (fullRev * currentRevolutions));
+
+	#if DEBUG_MOTOR
+		Serial.print("FTMotor -> getCurrentAbsolutePosition: ");
+		Serial.println(absolutePos);
+	#endif
+
+	return absolutePos;
+}
+
+long FTMotor::getCurrentRelativePosition()
+{
+	#if DEBUG_MOTOR
+		Serial.print("FTMotor -> getCurrentRelativePosition: ");
+		Serial.println(relativePos);
+	#endif
+	return mStepper->currentPosition();
+}
+
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	Private
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-long FTMotor::getNewRelativePosition(long newAbsolutePos, int direction, int rotations)
+long FTMotor::getNewTargetRelativePosition(long newAbsolutePos, int direction, int rotations)
 {
-	//Calculates a relative position to an absolute one (0 to fullRev)
-	long newRelativePos = 0;
+	//Calculates a relative position relative to an absolute one (0 to fullRev)
+	//Does further recquired calculations regarding extra rotations and direction to move
 	long currentRelativePos = mStepper->currentPosition();
-	//long currentAbsolutePos	= currentRelativePos % fullRev;
 	int currentRevolutions = (int) currentRelativePos / fullRev;
-
-	newRelativePos = (currentRevolutions * fullRev) + newAbsolutePos;
+	long newRelativePos = (currentRevolutions * fullRev) + newAbsolutePos;
 
 	switch (direction){
 		case -1:

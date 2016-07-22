@@ -55,6 +55,8 @@ class FTMotor
     void setConstantSpeed(float speedFactor);
     void setAccelSpeed(float in, float out, float maxSpeedLimiter);
     bool isMoving();
+    long getCurrentAbsolutePosition();
+    long getCurrentRelativePosition();
 
   private:
     long mLastPos; //Contains the last relative position before starting movement.
@@ -62,7 +64,7 @@ class FTMotor
     long mTargetDistance; //Contains the distance to go to a certain position.
     long fullRev; //Keeping FULLREV value 
 
-  	long getNewRelativePosition(long newAbsolutePos, int direction, int revolutions);
+  	long getNewTargetRelativePosition(long newAbsolutePos, int direction, int revolutions);
     long getAbsoluteDistance(long lastPos, long newPos);
   	void updateSpeed();
 };

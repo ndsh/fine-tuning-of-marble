@@ -92,48 +92,7 @@ void FTSensor::toggleDataParsing(bool state)
 	Private
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-void FTSensor::parseDataToArray(long absolutePos)
-{
-  if (absolutePos > sStepRange * (sParsingIndex+1))
-  {
-    sParsingIndex++;
-  }
-  sPositionArray[sParsingIndex] = absolutePos;
-  sDataArray[sParsingIndex] = sCurrentSensorValue;
-  #if DEBUG_SENSOR
-    Serial.print("FTSensor -> parseDataToArray: ");
-    Serial.print("sParsingIndex: ");
-    Serial.print(sParsingIndex);
-    Serial.print(" absolutePos: ");
-    Serial.print(absolutePos);
-    Serial.print(" sCurrentSensorValue: ");
-    Serial.println(sCurrentSensorValue);
-  #endif
-}
-
-int FTSensor::getDataFromAbsolutePos(long absolutePos)
-{
-  for (int i = 0; i < MAXVALUES; i++)
-  {
-    if (absolutePos-sStepRange < sPositionArray[i]  || sPositionArray[i] < absolutePos+sStepRange)
-    {
-      #if DEBUG_SENSOR
-        Serial.print("FTSensor -> getDataFromAbsolutePos: ");
-        Serial.println(sDataArray[i]);
-      #endif
-      sCurrentSensorValue = sDataArray[i];
-      return sCurrentSensorValue;
-    }
-  }
-  #if DEBUG_SENSOR
-    Serial.print("FTSensor -> getDataFromAbsolutePos: ");
-    Serial.print(" not found! Returning last retrieved value: ");
-    Serial.println(sCurrentSensorValue);
-  #endif
-  return sCurrentSensorValue;
-}
-
-int FTSensor::filterData(int raw){     
+  int FTSensor::filterData(int raw){     
 
   //Assign to filter array
   sFilterDataArray[sFilterIndex] = raw;
@@ -156,4 +115,48 @@ int FTSensor::filterData(int raw){
   int average = sum/FILTERSAMPLES;
 
   return average;
+}
+
+void FTSensor::parseDataToArray(long absolutePos)
+{
+  if (absolutePos > sStepRange * (sParsingIndex+1))
+  {
+    sParsingIndex++;
+  }
+  sPositionArray[sParsingIndex] = absolutePos;
+  sDataArray[sParsingIndex] = sCurrentSensorValue;
+  #if DEBUG_SENSOR
+    Serial.print("FTSensor -> parseDataToArray: ");
+    Serial.print("sParsingIndex: ");
+    Serial.print(sParsingIndex);
+    Serial.print(" absolutePos: ");
+    Serial.print(absolutePos);
+    Serial.print(" sCurrentSensorValue: ");
+    Serial.println(sCurrentSensorValue);
+  #endif
+}
+
+int FTSensor::getDataFromAbsolutePos(long absolutePos)
+{
+  //Find the closest position
+  long d = abs(sPositionArray[0] - absolutePos);
+  int idx = 0;
+  for(int c = 1; c < MAXVALUES; c++){
+      long cd = abs(sPositionArray[c] - absolutePos);
+      if(cd < d){
+          idx = c;
+          d = cd;
+      }
+  }
+
+  #if DEBUG_SENSOR
+    Serial.print("FTSensor -> getDataFromAbsolutePos: ");
+    Serial.print(absolutePos);
+    Serial.print(" -> closestPosition: ")
+    Serial.print(sPositionArray[idx]);
+    Serial.print(" -> returning Data: ")
+    Serial.println(sDataArray[idx]);
+  #endif
+
+  return sDataArray[idx];
 }

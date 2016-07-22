@@ -40,7 +40,7 @@ class FTSensor
   	long fullRev; //Keeping FULLREV value
 
   	int filterData(int raw); //Filtering data
-  	int getDataFromAbsolutePos (long absolutePos); //Searches position array to retrieve sensor data
+  	int getDataFromAbsolutePos (long absolutePos); //Finds the closest position in the position array and retrieve its sensor data
   	void parseDataToArray(long absolutePos);
 };
 

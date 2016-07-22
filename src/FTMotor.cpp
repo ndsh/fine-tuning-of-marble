@@ -311,6 +311,7 @@ void FTMotor::updateSpeed()
 	mSpeed = newSpeed;
 
 	/*
+	//The following debug messages are heavy to the Teensy. Use it only when extremely needed, and to short distances.
 	#if DEBUG_MOTOR
 		Serial.print("FTMotor -> updatedSpeed: ");
 		Serial.print("mLastPos: ");

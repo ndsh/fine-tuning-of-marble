@@ -7,10 +7,10 @@
 
 #ifndef FTSensor_h
 #define FTSensor_h
-#define MAXVALUES 1800 //360*5
+#define MAXVALUES 1440  //360*4
 #define SENSOR_CYCLE 10 //Number of update() cycles to enable analogRead()
 #define FILTERSAMPLES 10 //The higher, the smoother & the slower
-#define DEBUG_SENSOR false
+#define DEBUG_SENSOR true
 
 #include <Arduino.h>
 
@@ -41,7 +41,7 @@ class FTSensor
 
   	int filterData(int raw); //Filtering data
   	int getDataFromAbsolutePos (long absolutePos); //Finds the closest position in the position array and retrieve its sensor data
-  	void parseDataToArray(long absolutePos);
+  	void parseDataToArray(long absolutePos); //Keeps the position & data in the main array.
 };
 
 #endif

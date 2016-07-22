@@ -19,6 +19,10 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 
   	//Store key values
   	fullRev = fullRevolution;
+
+  	//Set initial states
+  	podState = 0;
+  	movCounter = 0;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -39,6 +43,7 @@ void FTPod::update() {
 	Score->update();
 
 	//Update Sensor
+	parseSensor();
 	Sensor->update();
 
 	//Update Motor
@@ -70,14 +75,32 @@ void FTPod::conductScore()
 	//Update the current FTPod state according to the current Score state.
 }
 
+void FTPod::parseSensor()
+{
+	//Control the data parsing of the sensor and LED status
+
+	//Following code is only for testing purposes:
+	Sensor->toggleLED(true);
+	if (movCounter == 1)
+	{
+		Sensor->toggleDataParsing(true);
+	}
+	else
+	{
+		Sensor->toggleDataParsing(false);
+	}
+	int sensor = Sensor->getSensorValue(Motor->getCurrentAbsolutePosition());
+}
+
 void FTPod::moveMotor()
 {
 	//Move the motor according to the Score and Sensor values.
 	if (!Motor->isMoving())
-	{		
-		//For now, an example of random movement:
+	{	
+		//Following code is only for testing purposes:
 		Motor->setAccelSpeed(0.14,0.14,1);
- 		Motor->runTo(random(fullRev),random(-1,1),0);
+ 		Motor->runTo(fullRev,0,0);
+ 		movCounter++;
 	}
 }
 

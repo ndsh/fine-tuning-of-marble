@@ -7,6 +7,7 @@
 */
 
 //Definitions
+
 #define FULLREV 230400 //9:1 25600
 #define SENSOR_PIN A0
 #define MOTOR_DIR_PIN 3
@@ -22,7 +23,7 @@
 FTPod* Pod;   
 
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
+  
 void setup() {
   //Setup Pins
   pinMode(SENSOR_PIN, INPUT_PULLDOWN);

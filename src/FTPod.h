@@ -34,6 +34,8 @@ class FTPod
 
     void update();
 
+    int podState; //Contains the main state number of the POD. Each state action is defined by the Score.
+    int movCounter; //Keeps track of the number of movements started by the motor.
     long fullRev; //Keeping FULLREV value
 
   private:
@@ -48,6 +50,7 @@ class FTPod
     void receiveCom();
     void setClock();
     void conductScore();
+    void parseSensor();
     void moveMotor();
     void tuneSynth();
 };

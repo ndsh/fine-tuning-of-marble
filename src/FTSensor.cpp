@@ -42,10 +42,6 @@ void FTSensor::update() {
 
 int FTSensor::getSensorValue (long absolutePos)
 {
-  #if DEBUG_SENSOR
-    Serial.print("FTSensor -> getSensorValue: ");
-    Serial.println(absolutePos);
-  #endif
   if (sIsParsing)
   {
     if (sParsingIndex < MAXVALUES && absolutePos <= fullRev)
@@ -82,10 +78,6 @@ void FTSensor::toggleLED(bool state)
 void FTSensor::toggleDataParsing(bool state)
 {
   sIsParsing = state;
-  #if DEBUG_SENSOR
-      Serial.print("FTSensor -> toggleDataParsing: ");
-      Serial.println(state);
-  #endif
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -122,23 +114,29 @@ void FTSensor::parseDataToArray(long absolutePos)
   if (absolutePos > sStepRange * (sParsingIndex+1))
   {
     sParsingIndex++;
+    #if DEBUG_SENSOR
+      Serial.print("FTSensor -> parseDataToArray: ");
+      Serial.print("sParsingIndex: ");
+      Serial.print(sParsingIndex);
+      Serial.print(" absolutePos: ");
+      Serial.print(absolutePos);
+      Serial.print(" sCurrentSensorValue: ");
+      Serial.println(sCurrentSensorValue);
+    #endif
   }
+
   sPositionArray[sParsingIndex] = absolutePos;
   sDataArray[sParsingIndex] = sCurrentSensorValue;
-  #if DEBUG_SENSOR
-    Serial.print("FTSensor -> parseDataToArray: ");
-    Serial.print("sParsingIndex: ");
-    Serial.print(sParsingIndex);
-    Serial.print(" absolutePos: ");
-    Serial.print(absolutePos);
-    Serial.print(" sCurrentSensorValue: ");
-    Serial.println(sCurrentSensorValue);
-  #endif
+  
 }
 
 int FTSensor::getDataFromAbsolutePos(long absolutePos)
 {
-  //Find the closest position
+  //Find the closest position using the Step Range as reference
+  int idx = floor(absolutePos/sStepRange);
+
+  /*  
+  //Find the real closest position
   long d = abs(sPositionArray[0] - absolutePos);
   int idx = 0;
   for(int c = 1; c < MAXVALUES; c++){
@@ -148,15 +146,18 @@ int FTSensor::getDataFromAbsolutePos(long absolutePos)
           d = cd;
       }
   }
+  */
 
+  /*
+  //Following debug lines are heavy on Teensy. Use it only when needed.
   #if DEBUG_SENSOR
     Serial.print("FTSensor -> getDataFromAbsolutePos: ");
     Serial.print(absolutePos);
-    Serial.print(" -> closestPosition: ")
+    Serial.print(" -> closestPosition: ");
     Serial.print(sPositionArray[idx]);
-    Serial.print(" -> returning Data: ")
+    Serial.print(" -> returning Data: ");
     Serial.println(sDataArray[idx]);
   #endif
-
+  */
   return sDataArray[idx];
 }

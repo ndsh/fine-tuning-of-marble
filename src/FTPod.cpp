@@ -19,6 +19,31 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 
   	//Store key values
   	fullRev = fullRevolution;
+  	
+	retrieveMacAddress();
+
+
+	// activate synthesizer
+	Music.init();
+
+	Music.enableEnvelope1();
+    Music.enableEnvelope2();
+    //TODO evaluate if delay is needed (when Midi initialization is removed from synth).
+    delay(1000);
+
+    // play a tune maybe?
+    Music.noteOn(69, 127);
+    delay(200);
+    Music.noteOff(69);
+
+    Music.noteOn(67, 127);
+    delay(200);
+    Music.noteOff(67);
+
+    Music.noteOn(76, 127);
+    delay(200);
+    Music.noteOff(76);
+    
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -26,6 +51,8 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 void FTPod::update() {
+	
+
 	//Update Com
 	receiveCom();
 	Com->update();
@@ -48,6 +75,19 @@ void FTPod::update() {
 	//Update Synth
 	tuneSynth();
 	Synth->update();
+}
+
+String FTPod::getMacAddress() {
+	return macAddress;
+}
+
+void FTPod::retrieveMacAddress() {
+	macAddress = MacAddress::get();
+  	#if DEBUG_POD
+    Serial.print("Your Teensy Mac Address is: ");
+    Serial.println(macAddress);
+    #endif
+    
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

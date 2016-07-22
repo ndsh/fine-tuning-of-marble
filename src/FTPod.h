@@ -24,7 +24,7 @@
 #include <MacAddress.h>
 
 //Definitions
-#define DEBUG_POD false
+#define DEBUG_POD true
 
 class FTPod
 {
@@ -33,8 +33,14 @@ class FTPod
     FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, long fullRevolution);
 
     void update();
+    String getMacAddress();
+    void retrieveMacAddress();
 
     long fullRev; //Keeping FULLREV value
+    String macAddress;
+    int mID;
+
+    
 
   private:
 

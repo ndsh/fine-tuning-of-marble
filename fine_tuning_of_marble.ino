@@ -13,6 +13,7 @@
 #define MOTOR_DIR_PIN 3
 #define MOTOR_STEP_PIN 4
 #define LED_PIN 5
+#define PODZERO_PIN 6
 #define INIT_DELAY 1000
 #define DEBUG false
 
@@ -30,6 +31,7 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   pinMode(MOTOR_DIR_PIN, OUTPUT);
   pinMode(MOTOR_STEP_PIN, OUTPUT);
+  pinMode(PODZERO_PIN, INPUT_PULLDOWN);
 
   //Create Pod
   Pod = new FTPod(SENSOR_PIN,LED_PIN,MOTOR_DIR_PIN,MOTOR_STEP_PIN,FULLREV);
@@ -42,6 +44,7 @@ void setup() {
 }
 
 void loop() {
+  Serial.println(digitalRead(PODZERO_PIN));
   //Update Pod
   Pod->update();
 }

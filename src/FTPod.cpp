@@ -19,12 +19,10 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 
   	//Store key values
   	fullRev = fullRevolution;
-<<<<<<< HEAD
 
   	//Set initial states
   	podState = 0;
   	movCounter = 0;
-=======
   	
 	retrieveMacAddress();
 
@@ -50,7 +48,6 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
     delay(200);
     Music.noteOff(76);
     
->>>>>>> 3679962d715c4782ac0a87fc2382e810dfa5a72b
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

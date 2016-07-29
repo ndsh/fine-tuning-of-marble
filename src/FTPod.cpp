@@ -7,7 +7,7 @@
 
 #include "FTPod.h"
 
-FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, long fullRevolution)
+FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, long fullRevolution)
 {
 	//Instantiate main objects
 	Com = new FTCom();
@@ -19,6 +19,7 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 
   	//Store key values
   	fullRev = fullRevolution;
+  	startPin = startButtonPin;
 
   	//Set initial states
   	podState = 0;
@@ -102,11 +103,28 @@ void FTPod::retrieveMacAddress() {
 void FTPod::receiveCom()
 {
 	//Receive messages from neighbour Pods.
+	//Ps: don't forget to do the Clock->updatePulse(uint16_t) and Clock->setMaster(false) properly in case it receives a pulse through midi ;)
 }
 
 void FTPod::setClock()
 {
 	//Set the clock according to Com received values.
+	if (Clock->isOn())
+	{
+		if (!Clock->isClockMaster())
+		{
+			//Get last clock value from COM and set
+			Clock->updatePulse(0); //<----- change this line later
+		}
+	}
+	else
+	{
+		if (digitalRead(startPin))
+		{
+			Clock->setMaster(true);
+			Clock->startClock();
+		}
+	}
 }
 
 void FTPod::conductScore()

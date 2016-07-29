@@ -24,13 +24,13 @@
 #include <MacAddress.h>
 
 //Definitions
-#define DEBUG_POD true
+#define DEBUG_POD false
 
 class FTPod
 {
   public:
 
-    FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, long fullRevolution);
+    FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, long fullRevolution);
 
     void update();
     String getMacAddress();
@@ -42,8 +42,6 @@ class FTPod
     String macAddress;
     int mID;
 
-    
-
   private:
 
   	FTScore* Score = nullptr;
@@ -52,6 +50,7 @@ class FTPod
   	FTSensor* Sensor = nullptr;
   	FTSynth* Synth = nullptr;
   	FTCom* Com = nullptr;
+    uint8_t startPin;
 
     void receiveCom();
     void setClock();

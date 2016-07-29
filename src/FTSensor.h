@@ -10,7 +10,7 @@
 #define MAXVALUES 1440  //360*4
 #define SENSOR_CYCLE 10 //Number of update() cycles to enable analogRead()
 #define FILTERSAMPLES 10 //The higher, the smoother & the slower
-#define DEBUG_SENSOR true
+#define DEBUG_SENSOR false
 
 #include <Arduino.h>
 

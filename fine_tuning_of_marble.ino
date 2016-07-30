@@ -21,7 +21,9 @@
 #include "src/FTPod.h"
 
 //Instances
-FTPod* Pod;   
+FTPod* Pod;
+
+bool isPodZero = false;
 
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
   
@@ -40,6 +42,11 @@ void setup() {
   delay(INIT_DELAY);
   #if DEBUG
     Serial.println("INIT")
+  #endif
+
+  if(digitalRead(PODZERO_PIN) == HIGH) isPodZero = true;
+  #if DEBUG
+    if(isPodZero == true) Serial.println("Greeting m'Ladies. The name's podZero. It's my pleasure to meet you.");
   #endif
 }
 

@@ -31,7 +31,7 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   pinMode(MOTOR_DIR_PIN, OUTPUT);
   pinMode(MOTOR_STEP_PIN, OUTPUT);
-  pinMode(START_PIN, INPUT);
+  pinMode(START_PIN, INPUT_PULLDOWN);
 
   //Create Pod
   Pod = new FTPod(SENSOR_PIN,LED_PIN,MOTOR_DIR_PIN,MOTOR_STEP_PIN,START_PIN,FULLREV);

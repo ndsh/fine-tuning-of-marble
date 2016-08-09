@@ -18,10 +18,7 @@
 #include "FTCom.h"
 
 //AO Library
-#include <CFOSynthesizer.h>
-#include <CFOMidi.h>
 #include <Scale.h>
-#include <MacAddress.h>
 
 //Definitions
 #define DEBUG_POD false
@@ -33,13 +30,10 @@ class FTPod
     FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, long fullRevolution);
 
     void update();
-    String getMacAddress();
-    void retrieveMacAddress();
-
+    bool _isPodZero = false; //Flag to the sign who is the Pod that dictates the time.
     int podState; //Contains the main state number of the POD. Each state action is defined by the Score.
     int movCounter; //Keeps track of the number of movements started by the motor.
     long fullRev; //Keeping FULLREV value
-    String macAddress;
     int mID;
 
   private:

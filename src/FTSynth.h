@@ -7,6 +7,11 @@
 
 #ifndef FTSynth_h
 #define FTSynth_h
+#include <CFOSynthesizer.h>
+#include <CFOMidi.h>
+
+//Definitions
+#define DEBUG_SYNTH true
 
 class FTSynth
 {
@@ -14,7 +19,7 @@ class FTSynth
     FTSynth();
     void update();
   private:
-
+    void playInitTune();
 };
 
 #endif

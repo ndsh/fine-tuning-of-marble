@@ -9,46 +9,28 @@
 
 FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, long fullRevolution)
 {
+	//Check wether is POD Zero
+	if(digitalRead(startButtonPin) == HIGH) _isPodZero = true;
+  #if DEBUG_POD
+    if(_isPodZero == true) Serial.println("FTPod -> Greeting m'Ladies. The name's podZero. It's my pleasure to meet you. ;)");
+		if(_isPodZero == false) Serial.println("FTPod -> Hey Mr Zero, I don't have a clock. Tell me the beat and I'll bump!");
+  #endif
+
 	//Instantiate main objects
 	Com = new FTCom();
 	Clock = new FTClock();
 	Score = new FTScore();
-  	Motor = new FTMotor(motorDirPin,motorStepPin,fullRevolution);
-  	Sensor = new FTSensor(sensorPin,ledPin,fullRevolution);
-  	Synth = new FTSynth();
+  Motor = new FTMotor(motorDirPin,motorStepPin,fullRevolution);
+  Sensor = new FTSensor(sensorPin,ledPin,fullRevolution);
+  Synth = new FTSynth();
 
-  	//Store key values
-  	fullRev = fullRevolution;
-  	startPin = startButtonPin;
+  //Store key values
+  fullRev = fullRevolution;
+  startPin = startButtonPin;
 
-  	//Set initial states
-  	podState = 0;
-  	movCounter = 0;
-  	
-	retrieveMacAddress();
-
-
-	// activate synthesizer
-	Music.init();
-
-	Music.enableEnvelope1();
-    Music.enableEnvelope2();
-    //TODO evaluate if delay is needed (when Midi initialization is removed from synth).
-    delay(1000);
-
-    // play a tune maybe?
-    Music.noteOn(69, 127);
-    delay(200);
-    Music.noteOff(69);
-
-    Music.noteOn(67, 127);
-    delay(200);
-    Music.noteOff(67);
-
-    Music.noteOn(76, 127);
-    delay(200);
-    Music.noteOff(76);
-    
+  //Set initial states
+  podState = 0;
+  movCounter = 0;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -56,8 +38,6 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 void FTPod::update() {
-	
-
 	//Update Com
 	receiveCom();
 	Com->update();
@@ -81,19 +61,6 @@ void FTPod::update() {
 	//Update Synth
 	tuneSynth();
 	Synth->update();
-}
-
-String FTPod::getMacAddress() {
-	return macAddress;
-}
-
-void FTPod::retrieveMacAddress() {
-	macAddress = MacAddress::get();
-  	#if DEBUG_POD
-    Serial.print("Your Teensy Mac Address is: ");
-    Serial.println(macAddress);
-    #endif
-    
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -154,7 +121,7 @@ void FTPod::moveMotor()
 {
 	//Move the motor according to the Score and Sensor values.
 	if (!Motor->isMoving())
-	{	
+	{
 		//Following code is only for testing purposes:
 		Motor->setAccelSpeed(0.14,0.14,1);
  		Motor->runTo(fullRev,0,0);

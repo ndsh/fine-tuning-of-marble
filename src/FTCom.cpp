@@ -11,9 +11,29 @@
 
 FTCom::FTCom()
 {
-	
+	retrieveMacAddress();
 }
 
 void FTCom::update() {
 
 }
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	Public
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+String FTCom::getMacAddress() {
+	return macAddress;
+}
+
+void FTCom::retrieveMacAddress() {
+	macAddress = MacAddress::get();
+  	#if DEBUG_COM
+    Serial.print("Your Teensy Mac Address is: ");
+    Serial.println(macAddress);
+    #endif
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	Private
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/

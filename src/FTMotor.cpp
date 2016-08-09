@@ -12,16 +12,17 @@ FTMotor::FTMotor(int stepPin, int dirPin, long fullRevolution)
 	//Configure stepper
 	mStepper = new AccelStepper(AccelStepper::FULL2WIRE, stepPin, dirPin);
 	mStepper->setMaxSpeed(MAXSPEED);
-  	mStepper->setSpeed(0);
-  	mStepper->setCurrentPosition(0);
+  mStepper->setSpeed(0);
+  mStepper->setCurrentPosition(0);
 
-  	//Set initial states
-  	mSpeed = 0;
-  	mRangeIn = 0;
-  	mRangeOut = 0;
-  	mMaxSpeedFactor = 1;
-  	mIsConstant = false;
-  	fullRev = fullRevolution;
+  //Set initial states
+  mSpeed = 0;
+  mRangeIn = 0;
+  mRangeOut = 0;
+  mMaxSpeedFactor = 1;
+  mIsConstant = false;
+	mCounter = 0;
+  fullRev = fullRevolution;
 }
 
 void FTMotor::update() {
@@ -32,7 +33,6 @@ void FTMotor::update() {
 	mStepper->runSpeedToPosition();
 }
 
- 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	Public
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -171,6 +171,24 @@ long FTMotor::getCurrentRelativePosition()
 		Serial.println(relativePos);
 	#endif
 	return relativePos;
+}
+
+int FTMotor::getTotalMovements()
+{
+	#if DEBUG_MOTOR
+		Serial.print("FTMotor -> getNumberOfMovements: ");
+		Serial.println(mCounter);
+	#endif
+	return mCounter;
+}
+
+void FTMotor::updateCounter()
+{
+	mCounter++;
+	#if DEBUG_MOTOR
+		Serial.print("FTMotor -> updateCounter: ");
+		Serial.println(mCounter);
+	#endif
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -331,5 +349,3 @@ void FTMotor::updateSpeed()
 	#endif
 	*/
 }
-
-

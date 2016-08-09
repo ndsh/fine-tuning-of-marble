@@ -7,30 +7,24 @@
 
 #include "FTPod.h"
 
-FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, long fullRevolution)
+FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, long fullRevolution, uint8_t nbOfPods)
 {
-	//Check wether is POD Zero
-	if(digitalRead(startButtonPin) == HIGH) _isPodZero = true;
-  #if DEBUG_POD
-    if(_isPodZero == true) Serial.println("FTPod -> Greeting m'Ladies. The name's podZero. It's my pleasure to meet you. ;)");
-		if(_isPodZero == false) Serial.println("FTPod -> Hey Mr Zero, I don't have a clock. Tell me the beat and I'll bump!");
-  #endif
+	//Starting score in play:
+	composition = 0;
+	act = 0;
 
 	//Instantiate main objects
 	Com = new FTCom();
 	Clock = new FTClock();
-	Score = new FTScore();
   Motor = new FTMotor(motorDirPin,motorStepPin,fullRevolution);
   Sensor = new FTSensor(sensorPin,ledPin,fullRevolution);
   Synth = new FTSynth();
 
   //Store key values
+	_start = false;
+	startPin = startButtonPin;
+	totalPods = nbOfPods;
   fullRev = fullRevolution;
-  startPin = startButtonPin;
-
-  //Set initial states
-  podState = 0;
-  movCounter = 0;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -39,28 +33,29 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 
 void FTPod::update() {
 	//Update Com
-	receiveCom();
+	//receiveCom();
 	Com->update();
 
-	//Update Clock
-	setClock();
-	Clock->update();
+	if (_start)
+	{
+		//Update Clock
+		setClock();
+		Clock->update();
 
-	//Update Score
-	conductScore();
-	Score->update();
+		//Update Sensor
+		parseSensor();
+		Sensor->update();
 
-	//Update Sensor
-	parseSensor();
-	Sensor->update();
+		//Update the composition
+		updateAct();
 
-	//Update Motor
-	moveMotor();
-	Motor->update();
+		//Conduct the POD
+		conduct();
 
-	//Update Synth
-	tuneSynth();
-	Synth->update();
+		//Passive update of the actuators
+		Motor->update();
+		Synth->update();
+	}
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -69,44 +64,58 @@ void FTPod::update() {
 
 void FTPod::receiveCom()
 {
-	//Receive messages from neighbour Pods.
-	//Ps: don't forget to do the Clock->updatePulse(uint16_t) and Clock->setMaster(false) properly in case it receives a pulse through midi ;)
+	//Check if the first value has been received from Com to start the play
+	if (Com->hasStarted() && !_start)
+	{
+		//Check if is master
+		checkMaster();
+
+		//Start the clock
+		Clock->startClock();
+		_start = true;
+		#if DEBUG_POD
+		Serial.println("FTPod -> receiveCom() -> Ladies and gentleman, please take your seats...");
+		#endif
+		delay(START_DELAY);
+		#if DEBUG_POD
+		Serial.println("FTPod -> receiveCom() -> Start!");
+		#endif
+	}
+}
+
+void FTPod::checkMaster()
+{
+	if(digitalRead(startPin) == HIGH)
+	{
+		Clock->setMaster(true);
+	}
+	else
+	{
+		Clock->setMaster(false); //Change to *true* in case testing/debugging without COM & the other PODs
+	}
+  #if DEBUG_POD
+    if(Clock->isClockMaster()) Serial.println("FTPod -> Greeting m'Ladies. The name's podZero. It's my pleasure to meet you. ;)");
+		if(!Clock->isClockMaster()) Serial.println("FTPod -> Hey Mr Zero, I don't have a clock. Tell me the beat 'cause I can't do the counts'!");
+  #endif
 }
 
 void FTPod::setClock()
 {
-	//Set the clock according to Com received values.
 	if (Clock->isOn())
 	{
 		if (!Clock->isClockMaster())
 		{
 			//Get last clock value from COM and set
-			Clock->updatePulse(0); //<----- change this line later
+			Clock->updatePulse(Com->getReceivedClock());
 		}
 	}
-	else
-	{
-		if (digitalRead(startPin))
-		{
-			Clock->setMaster(true);
-			Clock->startClock();
-		}
-	}
-}
-
-void FTPod::conductScore()
-{
-	//Update the current timing of the Score according to the Clock.
-	//Update the current FTPod state according to the current Score state.
 }
 
 void FTPod::parseSensor()
 {
-	//Control the data parsing of the sensor and LED status
-
 	//Following code is only for testing purposes:
 	Sensor->toggleLED(true);
-	if (movCounter == 1)
+	if (Motor->getTotalMovements() == 1)
 	{
 		Sensor->toggleDataParsing(true);
 	}
@@ -117,19 +126,128 @@ void FTPod::parseSensor()
 	int sensor = Sensor->getSensorValue(Motor->getCurrentAbsolutePosition());
 }
 
-void FTPod::moveMotor()
+void FTPod::updateAct()
 {
-	//Move the motor according to the Score and Sensor values.
-	if (!Motor->isMoving())
+	if (act < MAX_ACTS)
 	{
-		//Following code is only for testing purposes:
-		Motor->setAccelSpeed(0.14,0.14,1);
- 		Motor->runTo(fullRev,0,0);
- 		movCounter++;
+		if (Clock->readClock() >= compositions[composition][act])
+		{
+			act++;
+			#if DEBUG_POD
+			Serial.print("FTPod -> updateAct() -> Changed to act: ");
+			Serial.println(act);
+			#endif
+		}
 	}
 }
 
-void FTPod::tuneSynth()
+void FTPod::conduct()
 {
-	//Parameterize the Synth according to the Score.
+	switch (composition){
+
+		case 0:
+		/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+			Composition 0: The Fine Tuning of Marble
+		+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+		switch (act){
+
+			case 0:
+				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				//COMP 0, ACT 0
+				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+				//Example:
+				if (!Motor->isMoving())
+				{
+					//Following code is only for testing purposes:
+					Motor->setAccelSpeed(0.14,0.14,1);
+			 		Motor->runTo(fullRev,0,0);
+			 		Motor->updateCounter();
+				}
+			break;
+
+			case 1:
+				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				//COMP 0, ACT 1
+				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+			break;
+
+			case 2:
+				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				//COMP 0, ACT 2
+				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+			break;
+
+			case 3:
+				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				//COMP 0, ACT 3
+				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+			break;
+
+			case 4:
+				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				//COMP 0, ACT 4
+				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+			break;
+
+			case 5:
+				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				//COMP 0, ACT 5
+				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+			break;
+
+			case 6:
+				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				//COMP 0, ACT 6
+				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+			break;
+
+			case 7:
+				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				//COMP 0, ACT 7
+				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+			break;
+
+			case 8:
+				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				//COMP 0, ACT 8
+				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+			break;
+
+			case 9:
+				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				//COMP 0, ACT 9
+				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+
+
+			break;
+		}
+
+		break;
+	}
 }

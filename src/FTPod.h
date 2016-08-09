@@ -10,7 +10,6 @@
 
 //Main includes
 #include <Arduino.h>
-#include "FTScore.h"
 #include "FTClock.h"
 #include "FTMotor.h"
 #include "FTSensor.h"
@@ -21,37 +20,43 @@
 #include <Scale.h>
 
 //Definitions
-#define DEBUG_POD false
+#define DEBUG_POD true
+#define START_DELAY 100 //Number of microseconds to start the play once the button has been pressed
+#define MAX_ACTS 10 //Holds the total number of acts
+
+//Main composition timing definitions (pulse counter thresholds per act)
+const uint16_t compositions[1][MAX_ACTS] = {
+  {10,20,30,40,50,60,70,80,90,100}
+};
 
 class FTPod
 {
   public:
 
-    FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, long fullRevolution);
-
+    FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, long fullRevolution, uint8_t nbOfPods);
     void update();
-    bool _isPodZero = false; //Flag to the sign who is the Pod that dictates the time.
-    int podState; //Contains the main state number of the POD. Each state action is defined by the Score.
-    int movCounter; //Keeps track of the number of movements started by the motor.
+
+    uint8_t composition; //Current composition in play
+    uint8_t act; //Current act in play
     long fullRev; //Keeping FULLREV value
-    int mID;
+    bool _start; //For beginning the play
 
   private:
 
-  	FTScore* Score = nullptr;
   	FTClock* Clock = nullptr;
   	FTMotor* Motor = nullptr;
   	FTSensor* Sensor = nullptr;
   	FTSynth* Synth = nullptr;
   	FTCom* Com = nullptr;
+    uint8_t totalPods;
     uint8_t startPin;
 
-    void receiveCom();
-    void setClock();
-    void conductScore();
-    void parseSensor();
-    void moveMotor();
-    void tuneSynth();
+    void checkMaster(); //Check wether is POD Zero (the-great-master-of-clocks).
+    void receiveCom(); //Receive messages from neighbour Pods.
+    void setClock(); //Set the clock according to Com received values.
+    void parseSensor(); //Control the data parsing of the sensor and LED status.
+    void updateAct(); //Update the current act in play.
+    void conduct(); //The main function that conducts the POD's action.
 };
 
 #endif

@@ -53,7 +53,7 @@ void FTClock::resetClock() {
 	calcIntervals();
 }
 
-uint16_t FTClock::getCount() {
+uint16_t FTClock::readClock() {
 	return cPulseCount;
 }
 

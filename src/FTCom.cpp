@@ -11,7 +11,13 @@
 
 FTCom::FTCom()
 {
+	//Retrieve POD's mac address
 	retrieveMacAddress();
+
+	//Set initial variables
+	cReceivedFlagCounter = 0;
+	cReceivedClock = 0;
+	cReceivedStart = false; //Change to *true* in case testing/debugging without COM & the other PODs
 }
 
 void FTCom::update() {
@@ -29,9 +35,20 @@ String FTCom::getMacAddress() {
 void FTCom::retrieveMacAddress() {
 	macAddress = MacAddress::get();
   	#if DEBUG_COM
-    Serial.print("Your Teensy Mac Address is: ");
+    Serial.print("FTCom -> retrieveMacAddress -> ");
     Serial.println(macAddress);
     #endif
+}
+
+bool FTCom::hasStarted(){
+	return cReceivedStart;
+}
+
+uint8_t FTCom::getReceivedFlagCounter(){
+	return cReceivedFlagCounter;
+}
+uint16_t FTCom::getReceivedClock(){
+	return cReceivedClock;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

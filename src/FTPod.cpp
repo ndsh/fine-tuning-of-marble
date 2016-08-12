@@ -34,7 +34,7 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 
 void FTPod::update() {
 	//Update Com
-	//receiveCom();
+	receiveCom();
 	Com->update();
 
 	if (_start)
@@ -66,21 +66,29 @@ void FTPod::update() {
 void FTPod::receiveCom()
 {
 	//Check if the first value has been received from Com to start the play
-	if (Com->hasStarted() && !_start)
+	if (!_start)
 	{
 		//Check if is master
 		checkMaster();
-
-		//Start the clock
-		Clock->startClock();
-		_start = true;
-		#if DEBUG_POD
-		Serial.println("FTPod -> receiveCom() -> Ladies and gentleman, please take your seats...");
-		#endif
-		delay(START_DELAY);
-		#if DEBUG_POD
-		Serial.println("FTPod -> receiveCom() -> Start!");
-		#endif
+		if (Com->pulseIn() && !_isClockMaster)
+		{
+			//It has started, updating iddle pods
+			Clock->updatePulse();
+			_start = true;
+		}
+		else
+		{
+			//It is the clock master, start!
+			_start = true;
+			#if DEBUG_POD
+			Serial.println("FTPod -> receiveCom() -> Ladies and gentleman, please take your seats...");
+			#endif
+			Clock->startClock();
+			delay(START_DELAY);
+			#if DEBUG_POD
+			Serial.println("FTPod -> receiveCom() -> Start!");
+			#endif
+		}
 	}
 }
 

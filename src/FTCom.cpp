@@ -8,19 +8,23 @@
 */
 
 #include "FTCom.h"
+#include "MIDI.h"
 
 FTCom::FTCom()
 {
+
+	MIDI.begin();
+
 	//Retrieve POD's mac address
 	retrieveMacAddress();
 
 	//Set initial variables
 	cPulseCount = 0;
-	cStart = false; //Change to *true* in case testing/debugging without COM & the other PODs
+	cStart = true; //Change to *true* in case testing/debugging without COM & the other PODs
 }
 
 void FTCom::update() {
-
+	
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -37,6 +41,43 @@ void FTCom::retrieveMacAddress() {
     Serial.print("FTCom -> retrieveMacAddress -> ");
     Serial.println(macAddress);
     #endif
+}
+
+bool FTCom::pulseIn() {
+	if (MIDI.read()) {                    // Is there a MIDI message incoming ?
+		#if DEBUG_COM
+    	Serial.print("FTCom -> pulse received: ");
+    	#endif
+	    byte type = MIDI.getType();
+	    byte pulseValue = 0;
+	    switch (type) {
+	      case ControlChange:
+	        pulseValue = MIDI.getData2();
+	      	#if DEBUG_COM
+	      	/*
+	    	Serial.print(note);
+	    	Serial.print("\t");
+	    	Serial.print(velocity);
+	    	Serial.print("\t");
+	    	Serial.println(channel);
+	    	*/
+	    	#endif
+	      break;
+	  	}
+	  	return pulseValue;
+  	} else return 0;
+}
+
+void FTCom::pulseOut(bool pulse) {
+	// is master?
+    for(int i = 0; i<7; i++) {
+    	// sendNoteOn: flag 0  / pulse = either 0 or 1 (no / yes) / all channels
+    	MIDI.sendControlChange(0, pulse, i);
+    	#if DEBUG_COM
+    	//Serial.print("FTCom -> pulse send to: ");
+    	//Serial.println(i);
+    	#endif
+    }
 }
 
 bool FTCom::hasStarted(){

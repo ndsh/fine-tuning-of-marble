@@ -8,6 +8,7 @@
 #ifndef FTCom_h
 #define FTCom_h
 #include <MacAddress.h>
+#include "MIDI.h"
 
 //Definitions
 #define DEBUG_COM true
@@ -18,8 +19,10 @@ class FTCom
     FTCom();
     void update();
 
-    //void send(params);
+    //void write(params);
     //uint16_t read(params);
+    bool pulseIn();
+    void pulseOut(bool pulse);
     bool hasStarted(); //For communicating the beginning of the play
     uint16_t getPulseCount(); //Returns cPulseCount, a counter of received pulses
 

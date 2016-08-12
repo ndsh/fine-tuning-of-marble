@@ -40,6 +40,9 @@ class FTPod
     uint8_t act; //Current act in play
     long fullRev; //Keeping FULLREV value
     bool _start; //For beginning the play
+    uint8_t totalPods;
+    uint8_t startPin;
+    bool _isClockMaster;
 
   private:
 
@@ -48,8 +51,6 @@ class FTPod
   	FTSensor* Sensor = nullptr;
   	FTSynth* Synth = nullptr;
   	FTCom* Com = nullptr;
-    uint8_t totalPods;
-    uint8_t startPin;
 
     void checkMaster(); //Check wether is POD Zero (the-great-master-of-clocks).
     void receiveCom(); //Receive messages from neighbour Pods.

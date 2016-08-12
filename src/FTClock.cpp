@@ -14,6 +14,7 @@ FTClock::FTClock()
 	cPulseCount = 0;
 	cLast = 0;
 	cNext = 0;
+	cPulse = false;
 }
 
 void FTClock::update() {
@@ -21,12 +22,17 @@ void FTClock::update() {
 	{
 		if(millis() >= cNext)
 		{
+			cPulse = true;
 			calcIntervals();
 			cPulseCount++;
 			#if DEBUG_CLOCK
 			Serial.print("FTClock -> cPulseCount: ");
 			Serial.println(cPulseCount);
 			#endif
+		}
+		else
+		{
+			cPulse = false;
 		}
 	}
 }
@@ -44,10 +50,6 @@ void FTClock::setMaster(bool isMaster) {
 	cIsMaster = isMaster;
 }
 
-void FTClock::updatePulse(uint16_t newPulseCount) {
-	cPulseCount = newPulseCount;
-}
-
 void FTClock::resetClock() {
 	cPulseCount = 0;
 	calcIntervals();
@@ -57,12 +59,17 @@ uint16_t FTClock::readClock() {
 	return cPulseCount;
 }
 
+bool FTClock::readPulse()
+{
+	return cPulse;
+}
+
 bool FTClock::isOn() {
 	return cIsOn;
 }
 
-bool FTClock::isClockMaster() {
-	return cIsMaster;
+void FTClock::updatePulse() {
+	cPulseCount++;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

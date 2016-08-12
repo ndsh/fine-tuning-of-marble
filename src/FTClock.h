@@ -20,15 +20,16 @@ class FTClock
     void update();
     void startClock(); //Starts the clock function
     void setMaster(bool isMaster); //If true, it does the pulse counting. If false, it is iddle, and only receives the pulse count
-    void updatePulse(uint16_t newPulseCount); //Updates the current pulse count
+    void updatePulse(); //Updates pulseClock +1
     void resetClock(); //Resets to clock to pulse count 0
     bool isOn(); //Returns OFF when clock hasn't been initialized (start button pin hasn't been pressed)
-    bool isClockMaster(); //Returns wether is clock master or not
+    bool readPulse(); //Returns true in case there is a pulse
     uint16_t readClock(); //Returns the current pulse count
 
   private:
   	bool cIsOn; //Flag to set the clock on/off
   	bool cIsMaster; //Flag checked by setMaster
+    bool cPulse; //Flag to signalize pulse
   	uint16_t cPulseCount; //Keeps track of the current pulse count
   	unsigned long cLast; //Keeps track of the last milli pulsed
   	unsigned long cNext; //Keeps track of the next milli to pulse

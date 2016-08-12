@@ -22,6 +22,7 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 
   //Store key values
 	_start = false;
+	_isClockMaster = false;
 	startPin = startButtonPin;
 	totalPods = nbOfPods;
   fullRev = fullRevolution;
@@ -87,15 +88,17 @@ void FTPod::checkMaster()
 {
 	if(digitalRead(startPin) == HIGH)
 	{
+		_isClockMaster = true;
 		Clock->setMaster(true);
 	}
 	else
 	{
+		_isClockMaster = false;
 		Clock->setMaster(false); //Change to *true* in case testing/debugging without COM & the other PODs
 	}
   #if DEBUG_POD
-    if(Clock->isClockMaster()) Serial.println("FTPod -> Greeting m'Ladies. The name's podZero. It's my pleasure to meet you. ;)");
-		if(!Clock->isClockMaster()) Serial.println("FTPod -> Hey Mr Zero, I don't have a clock. Tell me the beat 'cause I can't do the counts'!");
+    if(_isClockMaster) Serial.println("FTPod -> Greeting m'Ladies. The name's podZero. It's my pleasure to meet you. ;)");
+		if(!_isClockMaster) Serial.println("FTPod -> Hey Mr Zero, I don't have a clock. Tell me the beat 'cause I can't do the counts'!");
   #endif
 }
 
@@ -103,10 +106,15 @@ void FTPod::setClock()
 {
 	if (Clock->isOn())
 	{
-		if (!Clock->isClockMaster())
+		if (!_isClockMaster)
 		{
 			//Get last clock value from COM and set
-			Clock->updatePulse(Com->getPulseCount());
+			if (Com->pulseIn()) Clock->updatePulse();
+		}
+		else
+		{
+			//Read pulse and send it to COM
+			Com->pulseOut(Clock->readPulse());
 		}
 	}
 }

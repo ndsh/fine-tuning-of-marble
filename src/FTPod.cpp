@@ -106,7 +106,7 @@ void FTPod::setClock()
 		if (!Clock->isClockMaster())
 		{
 			//Get last clock value from COM and set
-			Clock->updatePulse(Com->getReceivedClock());
+			Clock->updatePulse(Com->getPulseCount());
 		}
 	}
 }

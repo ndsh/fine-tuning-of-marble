@@ -15,9 +15,8 @@ FTCom::FTCom()
 	retrieveMacAddress();
 
 	//Set initial variables
-	cReceivedFlagCounter = 0;
-	cReceivedClock = 0;
-	cReceivedStart = false; //Change to *true* in case testing/debugging without COM & the other PODs
+	cPulseCount = 0;
+	cStart = false; //Change to *true* in case testing/debugging without COM & the other PODs
 }
 
 void FTCom::update() {
@@ -41,16 +40,16 @@ void FTCom::retrieveMacAddress() {
 }
 
 bool FTCom::hasStarted(){
-	return cReceivedStart;
+	return cStart;
 }
-
-uint8_t FTCom::getReceivedFlagCounter(){
-	return cReceivedFlagCounter;
-}
-uint16_t FTCom::getReceivedClock(){
-	return cReceivedClock;
+uint16_t FTCom::getPulseCount(){
+	return cPulseCount;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	Private
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+void FTCom::pulse(){
+	cPulseCount++;
+}

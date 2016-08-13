@@ -10,7 +10,7 @@
 #include "FTCom.h"
 #include "MIDI.h"
 
-FTCom::FTCom()
+FTCom::FTCom(uint8_t onboardLedPin)
 {
 
 	MIDI.begin();
@@ -21,10 +21,11 @@ FTCom::FTCom()
 	//Set initial variables
 	cPulseCount = 0;
 	cStart = true; //Change to *true* in case testing/debugging without COM & the other PODs
+
+	onboardLedPin = onboardLedPin;
 }
 
 void FTCom::update() {
-	
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -85,6 +86,14 @@ bool FTCom::hasStarted(){
 }
 uint16_t FTCom::getPulseCount(){
 	return cPulseCount;
+}
+
+void FTCom::turnOnLED() {
+	digitalWrite(onboardLedPin, HIGH);
+}
+
+void FTCom::turnOffLED() {
+	digitalWrite(onboardLedPin, LOW);
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

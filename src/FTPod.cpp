@@ -7,14 +7,14 @@
 
 #include "FTPod.h"
 
-FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, long fullRevolution, uint8_t nbOfPods)
+FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, uint8_t onboardLedPin, long fullRevolution, uint8_t nbOfPods)
 {
 	//Starting score in play:
 	composition = 0;
 	act = 0;
 
 	//Instantiate main objects
-	Com = new FTCom();
+	Com = new FTCom(onboardLedPin);
 	Clock = new FTClock();
   Motor = new FTMotor(motorDirPin,motorStepPin,fullRevolution);
   Sensor = new FTSensor(sensorPin,ledPin,fullRevolution);
@@ -25,6 +25,7 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 	_isClockMaster = false;
 	startPin = startButtonPin;
 	totalPods = nbOfPods;
+	onboardLedPin = onboardLedPin;
   fullRev = fullRevolution;
 }
 
@@ -102,7 +103,7 @@ void FTPod::checkMaster()
 	else
 	{
 		_isClockMaster = false;
-		Clock->setMaster(false); //Change to *true* in case testing/debugging without COM & the other PODs
+		Clock->setMaster(true); //Change to *true* in case testing/debugging without COM & the other PODs
 	}
   #if DEBUG_POD
     if(_isClockMaster) Serial.println("FTPod -> Greeting m'Ladies. The name's podZero. It's my pleasure to meet you. ;)");

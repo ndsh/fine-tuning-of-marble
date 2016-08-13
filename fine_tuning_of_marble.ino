@@ -9,11 +9,14 @@
 //Definitions
 
 #define FULLREV 230400 //9:1 25600
+
 #define SENSOR_PIN A0
 #define MOTOR_DIR_PIN 3
 #define MOTOR_STEP_PIN 4
 #define LED_PIN 5
 #define START_PIN 6
+#define ONBOARD_LED_PIN 13
+
 #define INIT_DELAY 1000
 #define TOTAL_PODS 7
 #define DEBUG true
@@ -33,6 +36,7 @@ void setup() {
   pinMode(MOTOR_DIR_PIN, OUTPUT);
   pinMode(MOTOR_STEP_PIN, OUTPUT);
   pinMode(START_PIN, INPUT_PULLDOWN);
+  pinMode(ONBOARD_LED_PIN, OUTPUT);
   delay(INIT_DELAY);
   
   #if DEBUG
@@ -41,7 +45,7 @@ void setup() {
   #endif
   
   //Create Pod
-  Pod = new FTPod(SENSOR_PIN,LED_PIN,MOTOR_DIR_PIN,MOTOR_STEP_PIN,START_PIN,FULLREV,TOTAL_PODS);
+  Pod = new FTPod(SENSOR_PIN,LED_PIN,MOTOR_DIR_PIN,MOTOR_STEP_PIN,START_PIN,ONBOARD_LED_PIN,FULLREV,TOTAL_PODS);
 }
 
 void loop() {

@@ -33,7 +33,7 @@ class FTPod
 {
   public:
 
-    FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, long fullRevolution, uint8_t nbOfPods);
+    FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, uint8_t onboardLedPin, long fullRevolution, uint8_t nbOfPods);
     void update();
 
     uint8_t composition; //Current composition in play
@@ -42,6 +42,7 @@ class FTPod
     bool _start; //For beginning the play
     uint8_t totalPods;
     uint8_t startPin;
+    uint8_t onboardLedPin;
     bool _isClockMaster;
 
   private:

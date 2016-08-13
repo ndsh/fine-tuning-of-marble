@@ -1,11 +1,15 @@
 /*
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- FTCom.cpp
- Copyright (c) 2016 The Fine Tuning of Marble
 
- Please refer to: https://www.pjrc.com/teensy/td_libs_MIDI.html
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    ./~     FTCom.cpp
+    ./~     Copyright (c) 2016 The Fine Tuning of Marble
+	
+	./~		[?] Please refer to: https://www.pjrc.com/teensy/td_libs_MIDI.html
+
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+    
 */
+
 
 #include "FTCom.h"
 #include "MIDI.h"
@@ -32,16 +36,35 @@ void FTCom::update() {
 	Public
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-String FTCom::getMacAddress() {
-	return macAddress;
+void FTCom::turnOnLED() {
+	digitalWrite(onboardLedPin, HIGH);
 }
 
-void FTCom::retrieveMacAddress() {
-	macAddress = MacAddress::get();
-  	#if DEBUG_COM
-    Serial.print("FTCom -> retrieveMacAddress -> ");
-    Serial.println(macAddress);
-    #endif
+void FTCom::turnOffLED() {
+	digitalWrite(onboardLedPin, LOW);
+}
+
+
+void FTCom::write(byte flag, byte data, byte channel) {
+	MIDI.sendNoteOn(flag, data, channel);
+	#if DEBUG_COM
+	//Serial.print("FTCom -> pulse send to: ");
+	//Serial.println(i);
+	#endif
+}
+
+void FTCom::write(byte flag, byte data) {
+	for(int i = 0; i<7; i++) {
+    	MIDI.sendNoteOn(flag, data, i);
+    	#if DEBUG_COM
+    	//Serial.print("FTCom -> pulse send to: ");
+    	//Serial.println(i);
+    	#endif
+    }	
+}
+
+byte FTCom::read() {
+	return (byte)1;
 }
 
 bool FTCom::pulseIn() {
@@ -70,7 +93,6 @@ bool FTCom::pulseIn() {
 }
 
 void FTCom::pulseOut(bool pulse) {
-	// is master?
     for(int i = 0; i<7; i++) {
     	// sendNoteOn: flag 0  / pulse = either 0 or 1 (no / yes) / all channels
     	MIDI.sendControlChange(0, pulse, i);
@@ -88,17 +110,21 @@ uint16_t FTCom::getPulseCount(){
 	return cPulseCount;
 }
 
-void FTCom::turnOnLED() {
-	digitalWrite(onboardLedPin, HIGH);
-}
-
-void FTCom::turnOffLED() {
-	digitalWrite(onboardLedPin, LOW);
-}
-
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	Private
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+String FTCom::getMacAddress() {
+	return macAddress;
+}	
+
+void FTCom::retrieveMacAddress() {
+	macAddress = MacAddress::get();
+  	#if DEBUG_COM
+    Serial.print("FTCom -> retrieveMacAddress -> ");
+    Serial.println(macAddress);
+    #endif
+}
 
 void FTCom::pulse(){
 	cPulseCount++;

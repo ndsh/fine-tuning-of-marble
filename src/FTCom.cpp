@@ -12,21 +12,20 @@
 
 
 #include "FTCom.h"
-#include "MIDI.h"
 
 FTCom::FTCom(uint8_t onboardLedPin)
 {
 
 	MIDI.begin();
 
-	//Retrieve POD's mac address
-	retrieveMacAddress();
-
 	//Set initial variables
-	cPulseCount = 0;
-	cStart = true; //Change to *true* in case testing/debugging without COM & the other PODs
+	mPulseCount = 0;
+	mStart = true; //Change to *true* in case testing/debugging without COM & the other PODs
 
-	onboardLedPin = onboardLedPin;
+	mOnboardLedPin = onboardLedPin;
+
+	startSequence();
+	
 }
 
 void FTCom::update() {
@@ -37,11 +36,26 @@ void FTCom::update() {
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 void FTCom::turnOnLED() {
-	digitalWrite(onboardLedPin, HIGH);
+	digitalWrite(mOnboardLedPin, HIGH);
 }
 
 void FTCom::turnOffLED() {
-	digitalWrite(onboardLedPin, LOW);
+	digitalWrite(mOnboardLedPin, LOW);
+}
+
+void FTCom::startSequence() {
+	turnOnLED();
+	delay(50);
+	turnOffLED();
+	delay(30);
+	turnOnLED();
+	delay(50);
+	turnOffLED();
+	delay(70);
+	turnOnLED();
+	delay(50);
+	turnOffLED();
+	delay(30);
 }
 
 
@@ -63,8 +77,34 @@ void FTCom::write(byte flag, byte data) {
     }	
 }
 
-byte FTCom::read() {
-	return (byte)1;
+byte FTCom::read(byte _flag) {
+	// not finished yet.
+	// flag = what we are waiting/looking for
+	if (MIDI.read()) {                    // Is there a MIDI message incoming ?
+		#if DEBUG_COM
+    	Serial.print("FTCom -> pulse received: ");
+    	#endif
+	    byte type = MIDI.getType();
+	    byte flag = 0;
+	    byte read = 0;
+	    switch (type) {
+	      case NoteOn:
+	      	flag = MIDI.getData1();
+	        read = MIDI.getData2();
+	        if(flag == _flag) return read;
+	      	#if DEBUG_COM
+	      	/*
+	    	Serial.print(note);
+	    	Serial.print("\t");
+	    	Serial.print(velocity);
+	    	Serial.print("\t");
+	    	Serial.println(channel);
+	    	*/
+	    	#endif
+	      break;
+	  	}
+	  	return 0;
+  	} else return 0;
 }
 
 bool FTCom::pulseIn() {
@@ -104,28 +144,16 @@ void FTCom::pulseOut(bool pulse) {
 }
 
 bool FTCom::hasStarted(){
-	return cStart;
+	return mStart;
 }
 uint16_t FTCom::getPulseCount(){
-	return cPulseCount;
+	return mPulseCount;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	Private
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-String FTCom::getMacAddress() {
-	return macAddress;
-}	
-
-void FTCom::retrieveMacAddress() {
-	macAddress = MacAddress::get();
-  	#if DEBUG_COM
-    Serial.print("FTCom -> retrieveMacAddress -> ");
-    Serial.println(macAddress);
-    #endif
-}
-
 void FTCom::pulse(){
-	cPulseCount++;
+	mPulseCount++;
 }

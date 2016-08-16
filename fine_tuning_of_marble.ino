@@ -1,9 +1,13 @@
 /*
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- FineTuningOfMarble.ino
- Copyright (c) 2016 The Fine Tuning of Marble
- https://github.com/ndsh/fine-tuning-of-marble
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    ./~     FineTuningOfMarble.ino
+    ./~     Copyright (c) 2016 The Fine Tuning of Marble
+
+    ./~     [!] https://github.com/ndsh/fine-tuning-of-marble
+    
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+
 */
 
 //Definitions
@@ -28,7 +32,7 @@
 FTPod* Pod;
 
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-  
+
 void setup() {
   //Setup Pins
   pinMode(SENSOR_PIN, INPUT);
@@ -38,19 +42,18 @@ void setup() {
   pinMode(START_PIN, INPUT_PULLDOWN);
   pinMode(ONBOARD_LED_PIN, OUTPUT);
   delay(INIT_DELAY);
-  
-  #if DEBUG
-    Serial.println("Root -> INIT");
-    Serial.println("Root -> Press the button to start");
-  #endif
-  
+
+#if DEBUG
+  Serial.println("~FTApp: INIT");
+  Serial.println("~FTApp: Press the button to start");
+  Serial.println();
+#endif
+
   //Create Pod
-  Pod = new FTPod(SENSOR_PIN,LED_PIN,MOTOR_DIR_PIN,MOTOR_STEP_PIN,START_PIN,ONBOARD_LED_PIN,FULLREV,TOTAL_PODS);
+  Pod = new FTPod(SENSOR_PIN, LED_PIN, MOTOR_DIR_PIN, MOTOR_STEP_PIN, START_PIN, ONBOARD_LED_PIN, FULLREV, TOTAL_PODS);
 }
 
 void loop() {
   //Update Pod
   Pod->update();
 }
-
-

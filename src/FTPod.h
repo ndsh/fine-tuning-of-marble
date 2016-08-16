@@ -1,9 +1,23 @@
 /*
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- FTPod.h
- Copyright (c) 2016 The Fine Tuning of Marble
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    ./~     FTPod.h
+    ./~     Copyright (c) 2016 The Fine Tuning of Marble
+    
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+
 */
+
+/*  
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+
+        the main pod.
+        it knows it's sub-routines and delegates between them.
+        it know it's own channel_id and the MAC address.
+
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+*/
+
 
 #ifndef FTPod_h
 #define FTPod_h
@@ -18,6 +32,7 @@
 
 //AO Library
 #include <Scale.h>
+#include <MacAddress.h>
 
 //Definitions
 #define DEBUG_POD true
@@ -36,14 +51,16 @@ class FTPod
     FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, uint8_t onboardLedPin, long fullRevolution, uint8_t nbOfPods);
     void update();
 
-    uint8_t composition; //Current composition in play
-    uint8_t act; //Current act in play
-    long fullRev; //Keeping FULLREV value
-    bool _start; //For beginning the play
-    uint8_t totalPods;
-    uint8_t startPin;
-    uint8_t onboardLedPin;
-    bool _isClockMaster;
+    uint8_t mComposition; //Current composition in play
+    uint8_t mAct; //Current act in play
+    long mFullRev; //Keeping FULLREV value
+    bool mStart; //For beginning the play
+    uint8_t mTotalPods;
+    uint8_t mStartPin;
+    uint8_t mOnboardLedPin;
+    bool mIsClockMaster;
+    uint8_t mPodChannel;
+    String mMacAddress;
 
   private:
 
@@ -57,8 +74,12 @@ class FTPod
     void receiveCom(); //Receive messages from neighbour Pods.
     void setClock(); //Set the clock according to Com received values.
     void parseSensor(); //Control the data parsing of the sensor and LED status.
+    void retrieveMacAddress();//Retrieve own MAC directly from hardware
+    String getMacAddress();//Getter for mMacAddress
+    void getMacAddressPosition();//Will read all MACs from MacAdresses.inc
     void updateAct(); //Update the current act in play.
     void conduct(); //The main function that conducts the POD's action.
+
 };
 
 #endif

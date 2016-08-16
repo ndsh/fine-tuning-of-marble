@@ -27,12 +27,13 @@ class FTClock
     uint16_t readClock(); //Returns the current pulse count
 
   private:
-  	bool cIsOn; //Flag to set the clock on/off
-  	bool cIsMaster; //Flag checked by setMaster
-    bool cPulse; //Flag to signalize pulse
-  	uint16_t cPulseCount; //Keeps track of the current pulse count
-  	unsigned long cLast; //Keeps track of the last milli pulsed
-  	unsigned long cNext; //Keeps track of the next milli to pulse
+  	bool mIsOn; //Flag to set the clock on/off
+  	bool mIsMaster; //Flag checked by setMaster
+    bool mPulse; //Flag to signalize pulse
+  	uint16_t mPulseCount; //Keeps track of the current pulse count
+  	unsigned long mLast; //Keeps track of the last milli pulsed
+  	unsigned long mNext; //Keeps track of the next milli to pulse
+    
   	void calcIntervals(); //Used to update the milli intervals
 };
 

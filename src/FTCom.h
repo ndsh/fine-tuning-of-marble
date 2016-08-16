@@ -24,8 +24,8 @@
 
         we will use some of these methods in a different manner:
 
-        ~ sendControlChange --> only for pulse!
-        ~ sendNoteOn        --> various other things (stop/wait)
+        ~ ControlChange --> only for pulse!
+        ~ NoteOn        --> various other things (stop/wait)
 
             | FLAG | MODE      | DATA                 | DIRECTION    |
             |------|-----------|----------------------|--------------|

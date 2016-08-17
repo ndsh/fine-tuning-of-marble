@@ -1,8 +1,12 @@
 /*
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- FTSensor.h
- Copyright (c) 2016 The Fine Tuning of Marble
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    ./~     FTSensor.h
+    ./~     Copyright (c) 2016 The Fine Tuning of Marble
+  
+
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+    
 */
 
 #ifndef FTSensor_h
@@ -19,8 +23,8 @@ class FTSensor
   public:
     FTSensor(int sensorPin, int ledPin, long fullRevolution);
 
-    int sDataArray[MAXVALUES];
-    long sPositionArray[MAXVALUES];
+    int mDataArray[MAXVALUES];
+    long mPositionArray[MAXVALUES];
 
     void update();
     void toggleLED(bool state);
@@ -28,16 +32,16 @@ class FTSensor
     int getSensorValue (long absolutePos);
 
   private:
-  	bool sIsParsing; //If true, is parsing data to array. If false, data is not parsed, but only accessed.
-  	int sFilterDataArray [FILTERSAMPLES]; //Used for filtering the data
-  	int sPinLED; //Keeping the LED pin
-  	int sPinSensor; //Keeping the Sensor pin
-  	int sParsingIndex; //For iterating on the data arrays when in active mode
-  	int sFilterIndex; //For iterating the filter array
-  	int sStepRange; //For keeping the step range for retrieving sensor values according to the MAXVALUES & FULLREV
-  	int sCurrentSensorValue; //For keeping track of the current sensor value
-  	int sCycleCounter; //For iterating the cycle counter to enable the next analogRead()
-  	long fullRev; //Keeping FULLREV value
+  	bool mIsParsing; //If true, is parsing data to array. If false, data is not parsed, but only accessed.
+  	int mFilterDataArray [FILTERSAMPLES]; //Used for filtering the data
+  	int mPinLED; //Keeping the LED pin
+  	int mPinSensor; //Keeping the Sensor pin
+  	int mParsingIndex; //For iterating on the data arrays when in active mode
+  	int mFilterIndex; //For iterating the filter array
+  	int mStepRange; //For keeping the step range for retrieving sensor values according to the MAXVALUES & FULLREV
+  	int mCurrentSensorValue; //For keeping track of the current sensor value
+  	int mCycleCounter; //For iterating the cycle counter to enable the next analogRead()
+  	long mFullRev; //Keeping FULLREV value
 
   	int filterData(int raw); //Filtering data
   	int getDataFromAbsolutePos (long absolutePos); //Finds the closest position in the position array and retrieve its sensor data

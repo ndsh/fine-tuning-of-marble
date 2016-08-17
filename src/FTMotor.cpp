@@ -1,8 +1,12 @@
 /*
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- FTMotor.cpp
- Copyright (c) 2016 The Fine Tuning of Marble
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    ./~     FTMotor.cpp
+    ./~     Copyright (c) 2016 The Fine Tuning of Marble
+	
+
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+    
 */
 
 #include "FTMotor.h"
@@ -12,17 +16,17 @@ FTMotor::FTMotor(int stepPin, int dirPin, long fullRevolution)
 	//Configure stepper
 	mStepper = new AccelStepper(AccelStepper::FULL2WIRE, stepPin, dirPin);
 	mStepper->setMaxSpeed(MAXSPEED);
-  mStepper->setSpeed(0);
-  mStepper->setCurrentPosition(0);
+	mStepper->setSpeed(0);
+	mStepper->setCurrentPosition(0);
 
-  //Set initial states
-  mSpeed = 0;
-  mRangeIn = 0;
-  mRangeOut = 0;
-  mMaxSpeedFactor = 1;
-  mIsConstant = false;
+	//Set initial states
+	mSpeed = 0;
+	mRangeIn = 0;
+	mRangeOut = 0;
+	mMaxSpeedFactor = 1;
+	mIsConstant = false;
 	mCounter = 0;
-  fullRev = fullRevolution;
+  	fullRev = fullRevolution;
 }
 
 void FTMotor::update() {
@@ -47,7 +51,7 @@ void FTMotor::rotate(float rotations,int direction)
 	mStepper->moveTo(mTargetPos);
 
 	#if DEBUG_MOTOR
-		Serial.print("FTMotor -> rotate: ");
+		Serial.print("~FTMtr::rotate()-› ");
 		Serial.print(rotations);
 		Serial.print("times / direction: ");
 		Serial.print(direction);
@@ -59,7 +63,7 @@ void FTMotor::rotate(float rotations,int direction)
 void FTMotor::runTo(long absolutePos, int direction, int rotations)
 {
 	#if DEBUG_MOTOR
-		Serial.print("FTMotor -> runTo: absolutePos:");
+		Serial.print("~FTMtr::runTo()-› absolutePos: ");
 		Serial.print(absolutePos);
 		Serial.print(" direction: ");
 		Serial.print(direction);
@@ -80,7 +84,7 @@ void FTMotor::stop()
 	mIsConstant = true;
 	mSpeed = 0;
 	#if DEBUG_MOTOR
-		Serial.println("FTMotor -> stop() ");
+		Serial.println("~FTMtr::stop()");
 	#endif
 }
 
@@ -90,7 +94,7 @@ void FTMotor::setConstantSpeed(float speedFactor)
 	mIsConstant = true;
 	mSpeed = MAXSPEED * speedFactor;
 	#if DEBUG_MOTOR
-		Serial.println("FTMotor -> setConstantSpeed: ");
+		Serial.print("~FTMtr::setConstantSpeed()-› ");
 		Serial.println(mSpeed);
 	#endif
 }
@@ -105,7 +109,7 @@ void FTMotor::setAccelSpeed(float in, float out, float maxSpeedLimiter)
 	mRangeOut = out;
 	mMaxSpeedFactor = maxSpeedLimiter;
 	#if DEBUG_MOTOR
-		Serial.print("FTMotor -> setAccelSpeed: in: ");
+		Serial.print("~FTMtr::setAccelSpeed()-› in: ");
 		Serial.print(in);
 		Serial.print(" out: ");
 		Serial.print(out);
@@ -152,7 +156,7 @@ long FTMotor::getCurrentAbsolutePosition()
 	}
 
 	#if DEBUG_MOTOR
-		Serial.print("FTMotor -> getCurrentAbsolutePosition: currentRelativePos: ");
+		Serial.print("~FTMtr::getCurrentAbsolutePosition()-› currentRelativePos: ");
 		Serial.print(currentRelativePos);
 		Serial.print(" currentRevolutions: ");
 		Serial.print(currentRevolutions);
@@ -167,7 +171,7 @@ long FTMotor::getCurrentRelativePosition()
 {
 	long relativePos = mStepper->currentPosition();
 	#if DEBUG_MOTOR
-		Serial.print("FTMotor -> getCurrentRelativePosition: ");
+		Serial.print("~FTMtr::getCurrentRelativePosition()-› ");
 		Serial.println(relativePos);
 	#endif
 	return relativePos;
@@ -176,7 +180,7 @@ long FTMotor::getCurrentRelativePosition()
 int FTMotor::getTotalMovements()
 {
 	#if DEBUG_MOTOR
-		Serial.print("FTMotor -> getNumberOfMovements: ");
+		Serial.print("~FTMtr::getNumberOfMovements()-› ");
 		Serial.println(mCounter);
 	#endif
 	return mCounter;
@@ -186,7 +190,7 @@ void FTMotor::updateCounter()
 {
 	mCounter++;
 	#if DEBUG_MOTOR
-		Serial.print("FTMotor -> updateCounter: ");
+		Serial.print("~FTMtr::updateCounter()-› ");
 		Serial.println(mCounter);
 	#endif
 }
@@ -247,7 +251,7 @@ long FTMotor::getNewTargetRelativePosition(long newAbsolutePos, int direction, i
 	}
 
 	#if DEBUG_MOTOR
-		Serial.print("FTMotor -> getNewTargetRelativePosition: ");
+		Serial.print("~FTMtr::getNewTargetRelativePosition()-› ");
 		Serial.print("newAbsolutePos: ");
 		Serial.print(newAbsolutePos);
 		Serial.print(" distance: ");
@@ -331,7 +335,7 @@ void FTMotor::updateSpeed()
 	/*
 	//The following debug messages are heavy to the Teensy. Use it only when extremely needed, and to short distances.
 	#if DEBUG_MOTOR
-		Serial.print("FTMotor -> updatedSpeed: ");
+		Serial.print("~FTMtr::updateSpeed()-› ");
 		Serial.print("mLastPos: ");
 		Serial.print(mLastPos);
 		Serial.print(" mTargetPos: ");

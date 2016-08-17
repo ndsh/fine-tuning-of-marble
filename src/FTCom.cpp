@@ -82,7 +82,7 @@ byte FTCom::read(byte _flag) {
 	// flag = what we are waiting/looking for
 	if (MIDI.read()) {                    // Is there a MIDI message incoming ?
 		#if DEBUG_COM
-    	Serial.print("FTCom -> pulse received: ");
+		Serial.print("~FTCom::read()-› ");
     	#endif
 	    byte type = MIDI.getType();
 	    byte flag = 0;
@@ -110,7 +110,7 @@ byte FTCom::read(byte _flag) {
 bool FTCom::pulseIn() {
 	if (MIDI.read()) {                    // Is there a MIDI message incoming ?
 		#if DEBUG_COM
-    	Serial.print("FTCom -> pulse received: ");
+    	Serial.print("~FTCom::pulseIn()-› ");
     	#endif
 	    byte type = MIDI.getType();
 	    byte pulseValue = 0;

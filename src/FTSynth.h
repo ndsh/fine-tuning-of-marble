@@ -1,8 +1,12 @@
 /*
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- FTSynth.h
- Copyright (c) 2016 The Fine Tuning of Marble
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    ./~     FTSynth.h
+    ./~     Copyright (c) 2016 The Fine Tuning of Marble
+	
+
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+    
 */
 
 #ifndef FTSynth_h
@@ -18,6 +22,8 @@ class FTSynth
   public:
     FTSynth();
     void update();
+    //applyPreset()
+    //getPreset()
   private:
     void playInitTune();
 };

@@ -1,23 +1,27 @@
 /*
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- FTSensor.cpp
- Copyright (c) 2016 The Fine Tuning of Marble
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    ./~     FTSensor.cpp
+    ./~     Copyright (c) 2016 The Fine Tuning of Marble
+  
+
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+    
 */
 
 #include "FTSensor.h"
 
 FTSensor::FTSensor(int sensorPin, int ledPin, long fullRevolution)
 {
-  fullRev = fullRevolution;
-	sStepRange = fullRevolution / MAXVALUES;
-  sPinLED = ledPin;
-  sPinSensor = sensorPin;
-  sIsParsing = false;
-  sParsingIndex = 0;
-  sFilterIndex = 0;
-  sCycleCounter = 0;
-  sCurrentSensorValue = analogRead(sPinSensor);
+  mFullRev = fullRevolution;
+	mStepRange = fullRevolution / MAXVALUES;
+  mPinLED = ledPin;
+  mPinSensor = sensorPin;
+  mIsParsing = false;
+  mParsingIndex = 0;
+  mFilterIndex = 0;
+  mCycleCounter = 0;
+  mCurrentSensorValue = analogRead(mPinSensor);
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -25,30 +29,30 @@ FTSensor::FTSensor(int sensorPin, int ledPin, long fullRevolution)
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 void FTSensor::update() {
-  if (sIsParsing)
+  if (mIsParsing)
   {
-    if (sCycleCounter < SENSOR_CYCLE)
+    if (mCycleCounter < SENSOR_CYCLE)
     {
-       sCycleCounter++;
+       mCycleCounter++;
     }
     else
     {
       //Cycle done, read new sensor data and filter
-      sCurrentSensorValue = filterData(analogRead(sPinSensor));
-      sCycleCounter = 0;
+      mCurrentSensorValue = filterData(analogRead(mPinSensor));
+      mCycleCounter = 0;
     }
   }
 }
 
 int FTSensor::getSensorValue (long absolutePos)
 {
-  if (sIsParsing)
+  if (mIsParsing)
   {
-    if (sParsingIndex < MAXVALUES && absolutePos <= fullRev)
+    if (mParsingIndex < MAXVALUES && absolutePos <= mFullRev)
     {
       //parse data to array
       parseDataToArray(absolutePos);
-      return sCurrentSensorValue;
+      return mCurrentSensorValue;
     }
     else
     {
@@ -67,17 +71,17 @@ void FTSensor::toggleLED(bool state)
 {
 	if (state)
 	{
-		digitalWrite(sPinLED, HIGH);
+		digitalWrite(mPinLED, HIGH);
 	}
 	else
 	{
-		digitalWrite(sPinLED, LOW);
+		digitalWrite(mPinLED, LOW);
 	}
 }
 
 void FTSensor::toggleDataParsing(bool state)
 {
-  sIsParsing = state;
+  mIsParsing = state;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -87,21 +91,21 @@ void FTSensor::toggleDataParsing(bool state)
   int FTSensor::filterData(int raw){     
 
   //Assign to filter array
-  sFilterDataArray[sFilterIndex] = raw;
-  if (sFilterIndex < FILTERSAMPLES-1)
+  mFilterDataArray[mFilterIndex] = raw;
+  if (mFilterIndex < FILTERSAMPLES-1)
   {
-    sFilterIndex++;
+    mFilterIndex++;
   }
   else
   {
-    sFilterIndex = 0;
+    mFilterIndex = 0;
   }
 
   //Calculate average
   int sum = 0;
   for (int i = 0; i < FILTERSAMPLES; i++)
   {
-    sum += sFilterDataArray[i];
+    sum += mFilterDataArray[i];
   }
 
   int average = sum/FILTERSAMPLES;
@@ -111,36 +115,36 @@ void FTSensor::toggleDataParsing(bool state)
 
 void FTSensor::parseDataToArray(long absolutePos)
 {
-  if (absolutePos > sStepRange * (sParsingIndex+1))
+  if (absolutePos > mStepRange * (mParsingIndex+1))
   {
-    sParsingIndex++;
+    mParsingIndex++;
     #if DEBUG_SENSOR
-      Serial.print("FTSensor -> parseDataToArray: ");
-      Serial.print("sParsingIndex: ");
-      Serial.print(sParsingIndex);
+      Serial.print("~FTSns::parseDataToArray()-› ");
+      Serial.print("mParsingIndex: ");
+      Serial.print(mParsingIndex);
       Serial.print(" absolutePos: ");
       Serial.print(absolutePos);
-      Serial.print(" sCurrentSensorValue: ");
-      Serial.println(sCurrentSensorValue);
+      Serial.print(" mCurrentSensorValue: ");
+      Serial.println(mCurrentSensorValue);
     #endif
   }
 
-  sPositionArray[sParsingIndex] = absolutePos;
-  sDataArray[sParsingIndex] = sCurrentSensorValue;
+  mPositionArray[mParsingIndex] = absolutePos;
+  mDataArray[mParsingIndex] = mCurrentSensorValue;
   
 }
 
 int FTSensor::getDataFromAbsolutePos(long absolutePos)
 {
   //Find the closest position using the Step Range as reference
-  int idx = floor(absolutePos/sStepRange);
+  int idx = floor(absolutePos/mStepRange);
 
   /*  
   //Find the real closest position
-  long d = abs(sPositionArray[0] - absolutePos);
+  long d = abs(mPositionArray[0] - absolutePos);
   int idx = 0;
   for(int c = 1; c < MAXVALUES; c++){
-      long cd = abs(sPositionArray[c] - absolutePos);
+      long cd = abs(mPositionArray[c] - absolutePos);
       if(cd < d){
           idx = c;
           d = cd;
@@ -151,13 +155,13 @@ int FTSensor::getDataFromAbsolutePos(long absolutePos)
   /*
   //Following debug lines are heavy on Teensy. Use it only when needed.
   #if DEBUG_SENSOR
-    Serial.print("FTSensor -> getDataFromAbsolutePos: ");
+    Serial.print("~FTSns::getDataFromAbsolutePos()-› ");
     Serial.print(absolutePos);
     Serial.print(" -> closestPosition: ");
-    Serial.print(sPositionArray[idx]);
+    Serial.print(mPositionArray[idx]);
     Serial.print(" -> returning Data: ");
-    Serial.println(sDataArray[idx]);
+    Serial.println(mDataArray[idx]);
   #endif
   */
-  return sDataArray[idx];
+  return mDataArray[idx];
 }

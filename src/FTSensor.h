@@ -2,11 +2,11 @@
 
     ./~     FTSensor.h
     ./~     Copyright (c) 2016 The Fine Tuning of Marble
-  
+
 
     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-    
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
 */
 
 #ifndef FTSensor_h
@@ -25,6 +25,7 @@ class FTSensor
 
     int mDataArray[MAXVALUES];
     long mPositionArray[MAXVALUES];
+    int mCurrentSensorValue; //For keeping track of the current sensor value
 
     void update();
     void toggleLED(bool state);
@@ -39,7 +40,6 @@ class FTSensor
   	int mParsingIndex; //For iterating on the data arrays when in active mode
   	int mFilterIndex; //For iterating the filter array
   	int mStepRange; //For keeping the step range for retrieving sensor values according to the MAXVALUES & FULLREV
-  	int mCurrentSensorValue; //For keeping track of the current sensor value
   	int mCycleCounter; //For iterating the cycle counter to enable the next analogRead()
   	long mFullRev; //Keeping FULLREV value
 

@@ -1,5 +1,5 @@
-// Add you Teensy Mac Addresses here.
-// ----------------------------------
+// Add your Teensy Mac Addresses here.
+// -----------------------------------
 "04:E9:E5:02:82:64",
 "04:E9:E5:02:6F:C1",
 "04:E9:E5:02:74:3F",

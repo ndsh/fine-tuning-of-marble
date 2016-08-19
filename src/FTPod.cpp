@@ -2,9 +2,9 @@
 
     ./~     FTPod.cpp
     ./~     Copyright (c) 2016 The Fine Tuning of Marble
-    
+
     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
 */
 
@@ -13,7 +13,7 @@
 FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, uint8_t onboardLedPin, long fullRevolution, uint8_t nbOfPods)
 {
 	//Starting score in play:
-	mComposition = 0;
+	mComposition = COMPOSITION;
 	mAct = 0;
 
 	//Store key values
@@ -23,11 +23,10 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 	mTotalPods = nbOfPods;
 	mOnboardLedPin = onboardLedPin;
 	mPodChannel = 0; //at time of creation we don't know how many pods are out there
-  	mFullRev = fullRevolution;
+  mFullRev = fullRevolution;
 
-  	//Retrieve POD's mac address
+  //Retrieve POD's mac address
 	retrieveMacAddress();
-
 	getMacAddressPosition();
 
 	//Instantiate main objects
@@ -35,7 +34,7 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 	Clock = new FTClock();
 	Motor = new FTMotor(motorDirPin,motorStepPin,fullRevolution);
 	Sensor = new FTSensor(sensorPin,ledPin,fullRevolution);
-	Synth = new FTSynth();
+	Synth = new FTSynth(mComposition);
 
   	//let's ask if there are other pods out there
   	//1. if this is the master
@@ -54,7 +53,7 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
   	//if channel is 0 -> check if master -> if not master, make an echo
   	//if channel is 0 -> check if master -> if master, do routine written above
 
-  	
+
 
 }
 
@@ -74,8 +73,8 @@ void FTPod::update() {
 		Clock->update();
 
 		//Update Sensor
-		parseSensor();
 		Sensor->update();
+		parseSensor();
 
 		//Update the composition
 		updateAct();
@@ -83,9 +82,11 @@ void FTPod::update() {
 		//Conduct the POD
 		conduct();
 
-		//Passive update of the actuators
+		//Uptade motor (passive)
 		Motor->update();
-		Synth->update();
+
+		//Update synth
+		tune();
 	}
 }
 
@@ -174,7 +175,7 @@ void FTPod::parseSensor()
 
 String FTPod::getMacAddress() {
 	return mMacAddress;
-}	
+}
 
 void FTPod::retrieveMacAddress() {
 	mMacAddress = MacAddress::get();
@@ -216,6 +217,11 @@ void FTPod::updateAct()
 			#endif
 		}
 	}
+}
+
+void FTPod::tune()
+{
+	Synth->mapDataToNote(Sensor->mCurrentSensorValue, NOTE_C3, NOTE_A6, MINOR, MINOR_LEN);
 }
 
 void FTPod::conduct()
@@ -328,5 +334,3 @@ void FTPod::conduct()
 		break;
 	}
 }
-
-

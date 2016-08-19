@@ -35,7 +35,7 @@ FTPod* Pod;
 
 void setup() {
   //Setup Pins
-  pinMode(SENSOR_PIN, INPUT);
+  pinMode(SENSOR_PIN, INPUT); 
   pinMode(LED_PIN, OUTPUT);
   pinMode(MOTOR_DIR_PIN, OUTPUT);
   pinMode(MOTOR_STEP_PIN, OUTPUT);

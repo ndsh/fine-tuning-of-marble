@@ -11,7 +11,7 @@
 
 #include "FTSynth.h"
 
-FTSynth::FTSynth(uint8_t id)
+FTSynth::FTSynth()
 {
 	// activate synthesizer
 	Music.init();
@@ -19,7 +19,7 @@ FTSynth::FTSynth(uint8_t id)
 	Music.enableEnvelope2();
 
 	//Apply presets
-	applyPreset(id);
+	applyPreset();
 
 	mNoteVelocity = 127;
   playInitTune();
@@ -29,7 +29,7 @@ FTSynth::FTSynth(uint8_t id)
 	Public
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-void FTSynth::applyPreset(uint8_t id)
+void FTSynth::applyPreset()
 {
 	//Preset arrays
 	uint8_t mPresetArray[] = {
@@ -52,6 +52,12 @@ void FTSynth::mapDataToNote(int sensorData, uint8_t baseNote, uint8_t maxNote, c
   uint8_t note = baseNote + (idScale * 12) + scale[modScale];
 	//Serial.printf("~FTSynth::mapDataToNote(): rangeOfScales %i - rangeOfNotes - %i - mapNoteInRange: %i - idScale: %i - modScale: %i - note: %i \n",rangeOfScales, rangeOfNotes, mapNoteInRange, idScale, modScale, note);
 	playNote(note);
+}
+
+void FTSynth::updateVelocity(float newVelocity)
+{
+	//newVelocity ranges from 0 to 1 (to facilitate conversion to 8bits)
+	mNoteVelocity = floor(newVelocity*127);
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

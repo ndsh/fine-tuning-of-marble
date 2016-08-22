@@ -2,11 +2,11 @@
 
     ./~     FTClock.h
     ./~     Copyright (c) 2016 The Fine Tuning of Marble
-  
+
 
     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-    
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
 */
 
 #ifndef FTClock_h
@@ -37,7 +37,7 @@ class FTClock
   	uint16_t mPulseCount; //Keeps track of the current pulse count
   	unsigned long mLast; //Keeps track of the last milli pulsed
   	unsigned long mNext; //Keeps track of the next milli to pulse
-    
+
   	void calcIntervals(); //Used to update the milli intervals
 };
 

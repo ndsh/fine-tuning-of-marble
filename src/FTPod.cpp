@@ -10,20 +10,17 @@
 
 #include "FTPod.h"
 
-FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, uint8_t onboardLedPin, long fullRevolution, uint8_t nbOfPods)
+FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, uint8_t onboardLedPin, long fullRevolution, uint8_t totalPods, uint8_t score)
 {
-	//Starting score in play:
-	mComposition = COMPOSITION;
-	mAct = 0;
-
 	//Store key values
+	mScore = score;
 	mStart = false;
 	mIsClockMaster = false;
 	mStartPin = startButtonPin;
-	mTotalPods = nbOfPods;
 	mOnboardLedPin = onboardLedPin;
 	mPodChannel = 0; //at time of creation we don't know how many pods are out there
   mFullRev = fullRevolution;
+	mTotalPods = totalPods;
 
   //Retrieve POD's mac address
 	retrieveMacAddress();
@@ -34,7 +31,8 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 	Clock = new FTClock();
 	Motor = new FTMotor(motorDirPin,motorStepPin,fullRevolution);
 	Sensor = new FTSensor(sensorPin,ledPin,fullRevolution);
-	Synth = new FTSynth(mComposition);
+	Synth = new FTSynth();
+	Score = new FTScore();
 
   	//let's ask if there are other pods out there
   	//1. if this is the master
@@ -63,7 +61,6 @@ FTPod::FTPod(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t mot
 
 void FTPod::update() {
 	//Update Com
-	receiveCom();
 	Com->update();
 
 	if (mStart)
@@ -76,9 +73,6 @@ void FTPod::update() {
 		Sensor->update();
 		parseSensor();
 
-		//Update the composition
-		updateAct();
-
 		//Conduct the POD
 		conduct();
 
@@ -88,6 +82,10 @@ void FTPod::update() {
 		//Update synth
 		tune();
 	}
+	else
+	{
+		receiveCom();
+	}
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -96,9 +94,6 @@ void FTPod::update() {
 
 void FTPod::receiveCom()
 {
-	//Check if the first value has been received from Com to start the play
-	if (!mStart)
-	{
 		//Check if is master
 		checkMaster();
 		if (Com->pulseIn() && !mIsClockMaster)
@@ -120,7 +115,7 @@ void FTPod::receiveCom()
 				Serial.println("~FTPod::receiveCom()-› Start!");
 			#endif
 		}
-	}
+
 }
 
 void FTPod::checkMaster()
@@ -160,6 +155,7 @@ void FTPod::setClock()
 
 void FTPod::parseSensor()
 {
+	/*
 	//Following code is only for testing purposes:
 	Sensor->toggleLED(true);
 	if (Motor->getTotalMovements() == 1)
@@ -171,6 +167,7 @@ void FTPod::parseSensor()
 		Sensor->toggleDataParsing(false);
 	}
 	int sensor = Sensor->getSensorValue(Motor->getCurrentAbsolutePosition());
+	*/
 }
 
 String FTPod::getMacAddress() {
@@ -190,7 +187,7 @@ void FTPod::getMacAddressPosition() {
 		#include "inc/Hardware.h"
 	};
 	uint8_t podChannel = 0;
-	for(uint8_t i = 0; i<7; i++) {
+	for(uint8_t i = 0; i < mTotalPods; i++) {
 		if(MacAddresses[i] == mMacAddress) {
 			MacAddresses[i] =
 			podChannel = i;
@@ -204,133 +201,13 @@ void FTPod::getMacAddressPosition() {
     #endif
 }
 
-void FTPod::updateAct()
-{
-	if (mAct < MAX_ACTS)
-	{
-		if (Clock->readClock() >= compositions[mComposition][mAct])
-		{
-			mAct++;
-			#if DEBUG_POD
-			Serial.print("~FTPod::updateAct()-› Changed to act: ");
-			Serial.println(mAct);
-			#endif
-		}
-	}
-}
-
 void FTPod::tune()
 {
+	//Example:
 	Synth->mapDataToNote(Sensor->mCurrentSensorValue, NOTE_C3, NOTE_A6, MINOR, MINOR_LEN);
 }
 
 void FTPod::conduct()
 {
-	switch (mComposition){
 
-		case 0:
-		/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-			Composition 0: The Fine Tuning of Marble
-		+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-		switch (mAct){
-
-			case 0:
-				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-				//COMP 0, ACT 0
-				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-				//Example:
-				if (!Motor->isMoving())
-				{
-					//Following code is only for testing purposes:
-					Motor->setAccelSpeed(0.14,0.14,1);
-			 		Motor->runTo(mFullRev,0,0);
-			 		Motor->updateCounter();
-				}
-			break;
-
-			case 1:
-				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-				//COMP 0, ACT 1
-				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-
-
-			break;
-
-			case 2:
-				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-				//COMP 0, ACT 2
-				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-
-
-			break;
-
-			case 3:
-				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-				//COMP 0, ACT 3
-				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-
-
-			break;
-
-			case 4:
-				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-				//COMP 0, ACT 4
-				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-
-
-			break;
-
-			case 5:
-				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-				//COMP 0, ACT 5
-				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-
-
-			break;
-
-			case 6:
-				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-				//COMP 0, ACT 6
-				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-
-
-			break;
-
-			case 7:
-				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-				//COMP 0, ACT 7
-				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-
-
-			break;
-
-			case 8:
-				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-				//COMP 0, ACT 8
-				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-
-
-			break;
-
-			case 9:
-				/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-				//COMP 0, ACT 9
-				+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-
-
-			break;
-		}
-
-		break;
-	}
 }

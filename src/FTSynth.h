@@ -20,13 +20,13 @@
 class FTSynth
 {
   public:
-    FTSynth(uint8_t id);
-    void applyPreset(uint8_t id);
+    FTSynth();
+    void applyPreset();
     void mapDataToNote(int sensorData, uint8_t baseNote, uint8_t maxNote, const uint8_t scale[], uint8_t scaleLength);
+    void updateVelocity(float newVelocity);
   private:
     void playInitTune();
     void playNote(uint8_t mNote);
-    uint8_t mID; //store the composition ID
     uint8_t mLastNote; //for keeping track of the last note played
     uint8_t mNoteVelocity; //note velocity
 };

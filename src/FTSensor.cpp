@@ -2,11 +2,11 @@
 
     ./~     FTSensor.cpp
     ./~     Copyright (c) 2016 The Fine Tuning of Marble
-  
+
 
     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-    
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
 */
 
 #include "FTSensor.h"
@@ -28,42 +28,23 @@ FTSensor::FTSensor(int sensorPin, int ledPin, long fullRevolution)
 	Public
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-void FTSensor::update() {
-  if (mIsParsing)
+void FTSensor::update(long absolutePos) {
+  if (mCycleCounter < SENSOR_CYCLE)
   {
-    if (mCycleCounter < SENSOR_CYCLE)
+     mCycleCounter++;
+  }
+  else
+  {
+    mCycleCounter = 0;
+    if (mIsParsing && mParsingIndex < MAXVALUES)
     {
-       mCycleCounter++;
-    }
-    else
-    {
-      //Cycle done, read new sensor data and filter
       mCurrentSensorValue = filterData(analogRead(mPinSensor));
-      mCycleCounter = 0;
-    }
-  }
-}
-
-int FTSensor::getSensorValue (long absolutePos)
-{
-  if (mIsParsing)
-  {
-    if (mParsingIndex < MAXVALUES && absolutePos <= mFullRev)
-    {
-      //parse data to array
       parseDataToArray(absolutePos);
-      return mCurrentSensorValue;
     }
     else
     {
-      //already above the limit, get from array
-      toggleDataParsing(false);
-      return getDataFromAbsolutePos(absolutePos);
+      mCurrentSensorValue = getDataFromAbsolutePos(absolutePos);
     }
-  }
-  else{
-    //get data from array
-    return getDataFromAbsolutePos(absolutePos);
   }
 }
 
@@ -88,7 +69,7 @@ void FTSensor::toggleDataParsing(bool state)
 	Private
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-  int FTSensor::filterData(int raw){     
+  int FTSensor::filterData(int raw){
 
   //Assign to filter array
   mFilterDataArray[mFilterIndex] = raw;
@@ -131,7 +112,7 @@ void FTSensor::parseDataToArray(long absolutePos)
 
   mPositionArray[mParsingIndex] = absolutePos;
   mDataArray[mParsingIndex] = mCurrentSensorValue;
-  
+
 }
 
 int FTSensor::getDataFromAbsolutePos(long absolutePos)
@@ -139,7 +120,7 @@ int FTSensor::getDataFromAbsolutePos(long absolutePos)
   //Find the closest position using the Step Range as reference
   int idx = floor(absolutePos/mStepRange);
 
-  /*  
+  /*
   //Find the real closest position
   long d = abs(mPositionArray[0] - absolutePos);
   int idx = 0;
@@ -164,4 +145,20 @@ int FTSensor::getDataFromAbsolutePos(long absolutePos)
   #endif
   */
   return mDataArray[idx];
+}
+
+long FTSensor::getAbsolutePosFromData(int data)
+{
+  //Find the closest data point in the array and retrieve its position
+  int d = abs(mDataArray[0] - data);
+  int idx = 0;
+  for(int c = 1; c < MAXVALUES; c++){
+      int cd = abs(mDataArray[c] - data);
+      if(cd < d){
+          idx = c;
+          d = cd;
+      }
+  }
+
+  return mPositionArray[idx];
 }

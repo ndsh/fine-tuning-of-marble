@@ -21,6 +21,7 @@ FTSynth::FTSynth()
 	//Apply presets
 	applyPreset();
 
+	mNote = 0;
 	mNoteVelocity = 127;
   playInitTune();
 }
@@ -42,29 +43,32 @@ void FTSynth::applyPreset()
   }
 }
 
-void FTSynth::mapDataToNote(int sensorData, uint8_t baseNote, uint8_t maxNote, const uint8_t scale[], uint8_t scaleLength)
+uint8_t FTSynth::mapDataToNote(int sensorData, uint8_t baseNote, uint8_t maxNote, const uint8_t scale[], uint8_t scaleLength)
 {
 	uint8_t rangeOfScales = floor((maxNote - baseNote)/12);
 	uint8_t rangeOfNotes = rangeOfScales * scaleLength;
 	uint8_t mapNoteInRange = map(sensorData,0,1023,0,rangeOfNotes);
 	uint8_t idScale = mapNoteInRange / scaleLength;
 	uint8_t modScale = mapNoteInRange - scaleLength * idScale;
-  uint8_t note = baseNote + (idScale * 12) + scale[modScale];
-	//Serial.printf("~FTSynth::mapDataToNote(): rangeOfScales %i - rangeOfNotes - %i - mapNoteInRange: %i - idScale: %i - modScale: %i - note: %i \n",rangeOfScales, rangeOfNotes, mapNoteInRange, idScale, modScale, note);
-	playNote(note);
+  return (baseNote + (idScale * 12) + scale[modScale]);
 }
 
-void FTSynth::updateVelocity(float newVelocity)
+void FTSynth::updateNote(uint8_t note)
+{
+	mNote = note;
+}
+
+void FTSynth::updateVelocity(uint8_t newVelocity)
 {
 	//newVelocity ranges from 0 to 1 (to facilitate conversion to 8bits)
-	mNoteVelocity = floor(newVelocity*127);
+	mNoteVelocity = newVelocity;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	Private
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-void FTSynth::playNote(uint8_t mNote)
+void FTSynth::playNote()
 {
 	#if DEBUG_SYNTH
 		Serial.printf("~FTSynth::playNote(): Note %i - Velocity: %i\n", mNote, mNoteVelocity);

@@ -31,6 +31,7 @@ class FTScore
     uint8_t getSynthAction(uint16_t actID);
     uint8_t getTimeOut(uint16_t actID);
     uint16_t getCurrentAct(uint16_t actID);
+    uint16_t getTotalActs();
     void startAct(uint16_t actID);
     void endAct(uint16_t actID);
 

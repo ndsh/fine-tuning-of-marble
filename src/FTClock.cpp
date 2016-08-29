@@ -2,17 +2,18 @@
 
     ./~     FTClock.cpp
     ./~     Copyright (c) 2016 The Fine Tuning of Marble
-	
+
 
     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-    
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
 */
 
 #include "FTClock.h"
 
-FTClock::FTClock()
+FTClock::FTClock(uint16_t pulseInterval)
 {
+	mPulseInterval = pulseInterval;
 	mIsOn = false;
 	mIsMaster = false;
 	mPulseCount = 0;
@@ -83,5 +84,5 @@ void FTClock::updatePulse() {
 void FTClock::calcIntervals()
 {
 	mLast = millis();
-	mNext = mLast + PULSE_INTERVAL;
+	mNext = mLast + mPulseInterval;
 }

@@ -2,12 +2,12 @@
 
     ./~     FTCom.cpp
     ./~     Copyright (c) 2016 The Fine Tuning of Marble
-	
+
 	./~		[?] Please refer to: https://www.pjrc.com/teensy/td_libs_MIDI.html
 
     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
-    
+    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
 */
 
 
@@ -19,13 +19,12 @@ FTCom::FTCom(uint8_t onboardLedPin)
 	MIDI.begin();
 
 	//Set initial variables
-	mPulseCount = 0;
 	mStart = true; //Change to *true* in case testing/debugging without COM & the other PODs
 
 	mOnboardLedPin = onboardLedPin;
 
 	startSequence();
-	
+
 }
 
 void FTCom::update() {
@@ -74,7 +73,7 @@ void FTCom::write(byte flag, byte data) {
     	//Serial.print("FTCom -> pulse send to: ");
     	//Serial.println(i);
     	#endif
-    }	
+    }
 }
 
 byte FTCom::read(byte _flag) {
@@ -146,14 +145,13 @@ void FTCom::pulseOut(bool pulse) {
 bool FTCom::hasStarted(){
 	return mStart;
 }
-uint16_t FTCom::getPulseCount(){
-	return mPulseCount;
+
+bool FTCom::podsDone(){
+	//Write code here, checking wether all pods are indicating that they have concluded their tasks
+	bool flag = false;
+	return flag;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	Private
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-void FTCom::pulse(){
-	mPulseCount++;
-}

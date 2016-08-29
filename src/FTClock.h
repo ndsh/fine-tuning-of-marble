@@ -14,13 +14,12 @@
 
 #include <Arduino.h>
 
-#define PULSE_INTERVAL 200 //In milliseconds
 #define DEBUG_CLOCK true
 
 class FTClock
 {
   public:
-    FTClock();
+    FTClock(uint16_t pulseInterval);
     void update();
     void startClock(); //Starts the clock function
     void setMaster(bool isMaster); //If true, it does the pulse counting. If false, it is iddle, and only receives the pulse count
@@ -34,6 +33,7 @@ class FTClock
   	bool mIsOn; //Flag to set the clock on/off
   	bool mIsMaster; //Flag checked by setMaster
     bool mPulse; //Flag to signalize pulse
+    uint16_t mPulseInterval; //Keeps the pulse interval
   	uint16_t mPulseCount; //Keeps track of the current pulse count
   	unsigned long mLast; //Keeps track of the last milli pulsed
   	unsigned long mNext; //Keeps track of the next milli to pulse

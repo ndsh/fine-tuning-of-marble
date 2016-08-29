@@ -27,10 +27,9 @@ class FTSensor
     long mPositionArray[MAXVALUES];
     int mCurrentSensorValue; //For keeping track of the current sensor value
 
-    void update();
+    void update(long absolutePos);
     void toggleLED(bool state);
     void toggleDataParsing(bool state);
-    int getSensorValue (long absolutePos);
 
   private:
   	bool mIsParsing; //If true, is parsing data to array. If false, data is not parsed, but only accessed.
@@ -45,6 +44,7 @@ class FTSensor
 
   	int filterData(int raw); //Filtering data
   	int getDataFromAbsolutePos (long absolutePos); //Finds the closest position in the position array and retrieve its sensor data
+    long getAbsolutePosFromData (int data); //Finds the closest data point in the data array and retrieve its absolute position
   	void parseDataToArray(long absolutePos); //Keeps the position & data in the main array.
 };
 

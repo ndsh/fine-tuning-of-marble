@@ -23,22 +23,16 @@ class FTScore
 {
   public:
   	FTScore();
-
-    uint16_t mAct;
-    bool mIsIddle;
-
-    bool doIPlay(uint8_t podID);
-    bool hasStarted();
-    bool hasEnded();
-    uint8_t getMotorAction();
-    uint8_t getSensorAction();
-    uint8_t getSynthAction();
-    uint8_t getTimeOut();
-    uint16_t getCurrentAct();
-
-    void updateAct(uint16_t newAct);
-    void startAct();
-    void endAct();
+    bool hasActStarted(uint16_t actID);
+    bool hasActEnded(uint16_t actID);
+    bool getPodPermission(uint16_t actID,uint8_t podID);
+    uint8_t getMotorAction(uint16_t actID);
+    uint8_t getSensorAction(uint16_t actID);
+    uint8_t getSynthAction(uint16_t actID);
+    uint8_t getTimeOut(uint16_t actID);
+    uint16_t getCurrentAct(uint16_t actID);
+    void startAct(uint16_t actID);
+    void endAct(uint16_t actID);
 
   private:
     FTAct* mActs[TOTAL_ACTS];

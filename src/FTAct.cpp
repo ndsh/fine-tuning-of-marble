@@ -25,25 +25,13 @@ FTAct::FTAct(bool pd0, bool pd1, bool pd2, bool pd3, bool pd4, bool pd5, bool pd
   mPodPermissions[3] = pd3;
   mPodPermissions[4] = pd4;
   mPodPermissions[5] = pd5;
-  mPodPermissions[6] = pd6;  
+  mPodPermissions[6] = pd6;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	Public
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-bool FTAct::getPodPermissionToAct(uint8_t podID){
+bool FTAct::getPodPermission(uint8_t podID){
   return mPodPermissions[podID];
 }
-
-void FTAct::startAct(){
-  mHasStarted = true;
-}
-
-void FTAct::endAct(){
-  mHasEnded = true;
-}
-
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	Private
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/

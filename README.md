@@ -1,4 +1,7 @@
-# The Fine Tuning of Marble
+[![](https://img.shields.io/badge/using-Processing-brightgreen.svg?style=flat-square&color=000000)](http://processing.org/)
+[![](https://img.shields.io/badge/using-Arduino-brightgreen.svg?style=flat-square&color=000000)](http://arduino.cc/)
+
+# floorScanners
 
 Repository for the source code of an ongoing sound installation and performance.
 

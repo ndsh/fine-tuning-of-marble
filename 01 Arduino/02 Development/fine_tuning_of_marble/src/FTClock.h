@@ -14,12 +14,7 @@
 
 #include <Arduino.h>
 
-<<<<<<< Updated upstream
-#define DEBUG_CLOCK true
-=======
-#define PULSE_INTERVAL 200 //In milliseconds
 #define DEBUG_CLOCK false
->>>>>>> Stashed changes
 
 class FTClock
 {

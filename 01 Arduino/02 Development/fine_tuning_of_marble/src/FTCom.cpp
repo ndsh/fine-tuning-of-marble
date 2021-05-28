@@ -19,15 +19,11 @@ FTCom::FTCom(uint8_t onboardLedPin)
 	MIDI.begin();
 
 	//Set initial variables
-<<<<<<< Updated upstream
-	mStart = true; //Change to *true* in case testing/debugging without COM & the other PODs
-=======
 	mPulseCount = 0;
 	mLedState = LOW;
 	mPreviousMillis = 0;
 	mInterval = 1000;
 	mStart = false; //Change to *true* in case testing/debugging without COM & the other PODs
->>>>>>> Stashed changes
 
 	mOnboardLedPin = onboardLedPin;
 

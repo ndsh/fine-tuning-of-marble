@@ -54,11 +54,7 @@ class FTCom
     void update();
     void turnOnLED();//Communicational Light
     void turnOffLED();//Communicational Light
-<<<<<<< Updated upstream
-=======
     void toggleLED();//Switch between on and off states
-
->>>>>>> Stashed changes
     void startSequence();//LED starting sequence to show Com is available
     void write(byte flag, byte data, byte channel); //Write to a specific channel
     void write(byte flag, byte data); //Do an OmniWrite to all channels
@@ -71,13 +67,12 @@ class FTCom
   private:
     uint8_t mOnboardLedPin;
     bool mStart; //Holds true in case the first value has been received (thus, starting the play)
-<<<<<<< Updated upstream
-=======
+
     bool mLedState;
     unsigned long mPreviousMillis;
     long mInterval;
 
->>>>>>> Stashed changes
+
     void pulse(); //Call this everytime a pulse is received
 };
 

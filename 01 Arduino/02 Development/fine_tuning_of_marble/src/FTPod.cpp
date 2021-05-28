@@ -64,12 +64,7 @@ void FTPod::update() {
 			conduct();
 			sendCom();
 		}
-
-<<<<<<< Updated upstream
-		//Passive Updates
-=======
-		//Update motor (passive)
->>>>>>> Stashed changes
+		
 		Motor->update();
 		Synth->playNote();
 	}

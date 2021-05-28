@@ -2,9 +2,9 @@
 [![](https://img.shields.io/badge/using-Arduino-brightgreen.svg?style=flat-square&color=000000)](http://arduino.cc/)
 
 <p align="center">
-  <img src="00 Assets/5-1.jpg">
+  <img src="0 Assets/key.jpg" />
 </p>
-# floorScanners
+#floorScanners
 Repository for the source code of an ongoing sound installation and performance.
 
 ### Dependencies (as of now)

@@ -5,7 +5,7 @@
   <img src="00 Assets/key.jpg" />
 </p>
 
-#floorScanners
+# floorScanners
 Repository for the source code of an ongoing sound installation and performance.
 
 ### Dependencies (as of now)

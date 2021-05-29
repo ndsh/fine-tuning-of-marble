@@ -31,7 +31,8 @@ tbd
 ---
 
 ### Classes
-<sub>
+<font size="1">
+	
 | Classname         | Description                                   | No. of Methods    | Current working state |
 |-------------------|-----------------------------------------------|-------------------|-----------------------|
 | StateMachine      | Organize States of a floorScanner             | 4/4               | Working               |
@@ -42,7 +43,8 @@ tbd
 | Synth             | Synth output over speakers. Adjust timber etc | N/A               | Not working yet       |
 | Communication     | Communication between Scanners over MIDI      | N/A               | Not working yet       |
 | MacAddress        | Returns a Teensy MacAddress                   | 2/2               | Working               |
-</sub>
+
+</font>
 
 ---
 

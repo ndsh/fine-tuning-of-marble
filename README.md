@@ -21,13 +21,17 @@ Repository for the source code of an ongoing sound installation and performance.
 ### About
 tbd
 
+---
+
 ### Dependencies
 * [Automatic Orchestra Library](https://github.com/automatic-orchestra/ao_library)
 * [AccelStepper Library, v1.51](http://www.airspayce.com/mikem/arduino/AccelStepper/)
 * [MIDI, v3.2](https://www.pjrc.com/teensy/td_libs_MIDI.html)
 
+---
 
 ### Classes
+<sub>
 | Classname         | Description                                   | No. of Methods    | Current working state |
 |-------------------|-----------------------------------------------|-------------------|-----------------------|
 | StateMachine      | Organize States of a floorScanner             | 4/4               | Working               |
@@ -38,6 +42,9 @@ tbd
 | Synth             | Synth output over speakers. Adjust timber etc | N/A               | Not working yet       |
 | Communication     | Communication between Scanners over MIDI      | N/A               | Not working yet       |
 | MacAddress        | Returns a Teensy MacAddress                   | 2/2               | Working               |
+</sub>
+
+---
 
 ### PCB
 Revisions

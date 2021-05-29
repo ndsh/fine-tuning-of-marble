@@ -24,9 +24,8 @@ tbd
 ---
 
 ### Dependencies
-* [Automatic Orchestra Library](https://github.com/automatic-orchestra/ao_library)
 * [AccelStepper Library, v1.51](http://www.airspayce.com/mikem/arduino/AccelStepper/)
-* [MIDI, v3.2](https://www.pjrc.com/teensy/td_libs_MIDI.html)
+* [Teensy MIDI, v3.2](https://www.pjrc.com/teensy/td_libs_MIDI.html)
 
 ---
 
@@ -41,7 +40,7 @@ These are the primary classes of the floorScanners living inside the /src/ folde
 | Motor             | Control Stepper Motor / Acceleration et al    | 11/11             | Working               |
 | Score             | -                                             | N/A               | Deprecated (?)        |
 | SensorHead        | Reading and storing sensordata on a circle    | 4/7               | Working               |
-| Synth             | Synth output over speakers. Adjust timber etc | N/A               | Not working yet       |
+| Synth             | Synth output over speakers. Adjust timber etc | N/A               | Working               |
 | Communication     | Communication between Scanners over MIDI      | N/A               | Not working yet       |
 | MacAddress        | Returns a Teensy MacAddress                   | 2/2               | Working               |
 

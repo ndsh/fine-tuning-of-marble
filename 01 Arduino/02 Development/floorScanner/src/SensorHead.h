@@ -12,9 +12,9 @@
 #ifndef SENSORHEAD_H
 #define SENSORHEAD_H
 
-#define DEBUG_SENSOR false
-
 #include <Arduino.h>
+
+#define DEBUG_SENSOR false
 
 class SensorHead {
 	public:

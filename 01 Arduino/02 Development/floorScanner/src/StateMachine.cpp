@@ -11,14 +11,18 @@
 
 #include "StateMachine.h"
 
-StateMachine::StateMachine(uint8_t _sensorPin, uint8_t _ledPin) {
+StateMachine::StateMachine(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, uint8_t onboardLedPin, long fullRevolution) {
 	#if DEBUG
 	  Serial.begin(57600);
 	  Serial.println("~floorScanner: INIT");
 	  Serial.println();
 	#endif
 
-	  Sensor = new SensorHead(_sensorPin, _ledPin);
+	//motor = new Motor(motorDirPin, motorStepPin, fullRevolution);
+	//sensor = new SensorHead(sensorPin, ledPin);
+	synth = new Synth();
+
+	//Sensor = new FTSensor(sensorPin,ledPin,fullRevolution);
 }
 
 void StateMachine::update() {

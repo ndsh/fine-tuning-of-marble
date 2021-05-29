@@ -11,78 +11,68 @@
 
 #include "Synth.h"
 
-Synth::Synth()
-{
-	// activate synthesizer
+/*
+	· · · · · · · · · · · · · · · · · · · · ·
+		PUBLIC
+	· · · · · · · · · · · · · · · · · · · · ·
+*/
+
+Synth::Synth() {
 	Music.init();
 	Music.enableEnvelope1();
 	Music.enableEnvelope2();
 
-	//Apply presets
 	applyPreset();
 
-	mNote = 0;
-	mNoteVelocity = 127;
-  playInitTune();
+	note = 0;
+	noteVelocity = 127;
+	startupTune();
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	Public
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-void Synth::applyPreset()
-{
-	//Preset arrays
-	uint8_t mPresetArray[] = {
+void Synth::applyPreset() {
+	uint8_t presetArray[] = {
 		23, 0, 0, 0, 50, 1, 127, 0, 121, 3, 0, 64, 64, 127, 9, 40, 0, 2, 0, 0, 0, 64, 63, 127, 4, 0, 0, 0, 0, 0, 0, 64, 61, 127, 4, 12, 0, 1, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 127, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 127, 127, 127, 127, 0, 0, 0, 0, 0, 1, 127, 127, 0, 127
 	};
-
-	//Apply
 	for (uint8_t i = 2; i < 128; i++) {
-    Midi.controller(0, i, mPresetArray[i]);
-  }
+		Midi.controller(0, i, presetArray[i]);
+	}
 }
 
-uint8_t Synth::mapDataToNote(int sensorData, uint8_t baseNote, uint8_t maxNote, const uint8_t scale[], uint8_t scaleLength)
-{
+uint8_t Synth::mapDataToNote(int sensorData, uint8_t baseNote, uint8_t maxNote, const uint8_t scale[], uint8_t scaleLength) {
 	uint8_t rangeOfScales = floor((maxNote - baseNote)/12);
 	uint8_t rangeOfNotes = rangeOfScales * scaleLength;
 	uint8_t mapNoteInRange = map(sensorData,0,1023,0,rangeOfNotes);
 	uint8_t idScale = mapNoteInRange / scaleLength;
 	uint8_t modScale = mapNoteInRange - scaleLength * idScale;
-  return (baseNote + (idScale * 12) + scale[modScale]);
+	return (baseNote + (idScale * 12) + scale[modScale]);
 }
 
-void Synth::updateNote(uint8_t note)
-{
-	mNote = note;
+void Synth::updateNote(uint8_t _note) {
+	note = _note;
 }
 
-void Synth::updateVelocity(uint8_t newVelocity)
-{
-	//newVelocity ranges from 0 to 1 (to facilitate conversion to 8bits)
-	mNoteVelocity = newVelocity;
+//newVelocity ranges from 0 to 1 (to facilitate conversion to 8bits)
+void Synth::updateVelocity(uint8_t newVelocity) {
+	noteVelocity = newVelocity;
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	Private
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/*
+	· · · · · · · · · · · · · · · · · · · · ·
+		PRIVATE
+	· · · · · · · · · · · · · · · · · · · · ·
+*/
 
-void Synth::playNote()
-{
+void Synth::playNote() {
 	#if DEBUG_SYNTH
-		Serial.printf("~Synth::playNote(): Note %i - Velocity: %i\n", mNote, mNoteVelocity);
+		Serial.printf("~Synth::playNote(): Note %i - Velocity: %i\n", note, noteVelocity);
 	#endif
-	if (mNote != mLastNote)
-	{
-		Music.noteOn(mNote, mNoteVelocity);
-		mLastNote = mNote;
+	if (note != lastNote) {
+		Music.noteOn(note, noteVelocity);
+		lastNote = note;
 	}
 }
 
-void Synth::playInitTune()
-{
-
+void Synth::startupTune() {
 	Music.noteOn(69, 127);
 	delay(200);
 

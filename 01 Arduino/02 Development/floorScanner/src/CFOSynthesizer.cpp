@@ -34,37 +34,34 @@ int64_t filterSamplesHP24dB[8];
 int64_t filterSamplesMoogLadder[4];
 
 const uint8_t programPresets[] = {
-#include <inc/Presets.h>
+	#include "inc/Presets.h"
 };
 
 const uint16_t sineTable[] = {
-#include <inc/SineTable.inc>
+	#include "inc/SineTable.h"
 };
 
 const uint16_t waveTable[] = {
-#include <inc/WaveTable.inc>
+	#include "inc/WaveTable.h"
 };
 
 // Table of MIDI note values to frequency in Hertz
 const float hertzTable[] = {
-#include <inc/HertzTable.inc>
+	#include "inc/HertzTable.h"
 };
 
 const int64_t filterCoefficient[] = {
-#include <inc/filterCoefficients_1poleLP.inc>
+	#include "inc/filterCoefficients_1poleLP.h"
 };
 
 const int64_t filterCoefficientsMoogLadder[] = {
-#include <inc/filterCoefficientsMoogLadder.inc>
+	#include "inc/filterCoefficientsMoogLadder.h"
 };
 
 // Used in the functions that set the envelope timing
 const uint32_t envTimeTable[] = {1,5,9,14,19,26,34,42,53,65,79,95,113,134,157,182,211,243,278,317,359,405,456,511,570,633,702,776,854,939,1029,1124,1226,1333,1448,1568,1695,1829,1971,2119,2274,2438,2610,2789,2977,3172,3377,3590,3813,4044,4285,4535,4795,5065,5345,5635,5936,6247,6569,6902,7247,7602,7970,8349,8740,9143,9559,9986,10427,10880,11347,11827,12321,12828,13349,13883,14433,14996,15574,16167,16775,17398,18036,18690,19359,20045,20746,21464,22198,22949,23716,24501,25303,26122,26959,27813,28686,29577,30486,31413,32359,33325,34309,35312,36335,37378,38440,39522,40625,41748,42892,44056,45241,46448,47675,48925,50196,51489,52803,54141,55500,56883,58288,59716,61167,62642,64140,65662};
 
 const float semitoneTable[] = {0.25,0.2648658,0.2806155,0.29730177,0.31498027,0.33370996,0.35355338,0.37457678,0.39685026,0.4204482,0.44544938,0.47193715,0.5,0.5297315,0.561231,0.59460354,0.62996054,0.6674199,0.70710677,0.74915355,0.7937005,0.8408964,0.8908987,0.9438743,1.0,1.0594631,1.122462,1.1892071,1.2599211,1.3348398,1.4142135,1.4983071,1.587401,1.6817929,1.7817974,1.8877486,2.0,2.1189263,2.244924,2.3784142,2.5198421,2.6696796,2.828427,2.9966142,3.174802,3.3635857,3.563595,3.7754972,4.0};
-
-
-
 
 //////////////////////////////////////////////////////////
 //
@@ -73,30 +70,27 @@ const float semitoneTable[] = {0.25,0.2648658,0.2806155,0.29730177,0.31498027,0.
 //////////////////////////////////////////////////////////
 
 void synth_isr(void) {
-  // First we output the sample calculated last time
-  Music.output2T3DAC();
+  	// First we output the sample calculated last time
+	Music.output2T3DAC();
 
-  // Update Envelopes
+	// Update Envelopes
 	Music.envelope1();
 	Music.envelope2();
 
-  // Update Oscillators
-  if(Music.is12bit) Music.synthInterrupt12bitSineFM();
+  	// Update Oscillators
+  	if(Music.is12bit) Music.synthInterrupt12bitSineFM();
 	else Music.synthInterrupt8bitFM();
 
-  // Run the output sample through the amplifying function (VCA style)
+  	// Run the output sample through the amplifying function (VCA style)
 	Music.amplifier();
 
-  // And then through the filter (VCF style)
+  	// And then through the filter (VCF style)
 	if(Music.lowpass) Music.filterLP6dB();
 	if(Music.highpass) Music.filterHP6dB();
-  if(Music.lowpass24dB) Music.filterLP24dB();
-  if(Music.highpass24dB) Music.filterHP24dB();
-  if(Music.moogLadder) Music.filterMoogLadder();
+  	if(Music.lowpass24dB) Music.filterLP24dB();
+  	if(Music.highpass24dB) Music.filterHP24dB();
+  	if(Music.moogLadder) Music.filterMoogLadder();
 }
-
-
-
 
 /////////////////////////////////////////////////////////
 //
@@ -106,9 +100,7 @@ void synth_isr(void) {
 
 
 
-void MMusic::synthInterrupt8bitFM ()
-{
-
+void MMusic::synthInterrupt8bitFM () {
 	dPhase1 = dPhase1 + (period1 - dPhase1) / portamento;
 	modulator1 = (fmAmount1 * fmOctaves1 * (*osc1modSource_ptr))>>10;
 	modulator1 = (modulator1 * (*osc1modShape_ptr))>>16;

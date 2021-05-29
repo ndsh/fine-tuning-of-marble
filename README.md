@@ -55,8 +55,8 @@ Revisions
 <sub>
 
 Copyright (c) 2016 – 2021 (The Fine Tuning of Marble / floorScanners)
-* [Irena Kukric](https://www.irenakukric.com)
-* [Luiz Zanotello](https://www.luizzanotello.com)
-* [Julian Hespenheide](https://www.julian-h.de)
+- &nearr; [Irena Kukric](https://www.irenakukric.com)
+- &nearr; [Luiz Zanotello](https://www.luizzanotello.com)
+- &nearr; [Julian Hespenheide](https://www.julian-h.de)
 
 </sub>

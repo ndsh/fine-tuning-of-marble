@@ -14,7 +14,10 @@
 
 #include <Arduino.h>
 /* include all other classes here */
+#include "MacAddress.h"
 #include "SensorHead.h"
+#include "Motor.h"
+#include "../inc/Scales.h"
 
 class StateMachine {
 	public:

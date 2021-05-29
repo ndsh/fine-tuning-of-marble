@@ -36,10 +36,11 @@ tbd
 | SensorHead        | Reading and storing sensordata on a circle    | 4/7               | Working               |
 | Synth             | Synth output over speakers. Adjust timber etc | N/A               | Not working yet       |
 | Communication     | Communication between Scanners over MIDI      | N/A               | Not working yet       |
+| MacAddress        | Returns a Teensy MacAddress                   | 2/2               | Working               |
 
 
 ### Authors
-Copyright (c) 2016 – 2021 The Fine Tuning of Marble
+Copyright (c) 2016 – 2021 (The Fine Tuning of Marble / floorScanners)
 * [Irena Kukric](https://www.irenakukric.com)
 * [Luiz Zanotello](https://www.luizzanotello.com)
 * [Julian Hespenheide](https://www.julian-h.de)

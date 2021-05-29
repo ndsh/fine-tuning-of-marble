@@ -23,8 +23,8 @@ void SensorHead::update() {}
 void SensorHead::read() {}
 
 void SensorHead::toggleLED(bool b) {
-	if(b) digitalWrite(pinLed, HIGH);
-	else digitalWrite(pinLed, LOW);
+	if(b) digitalWrite(ledPin, HIGH);
+	else digitalWrite(ledPin, LOW);
 }
 
 void SensorHead::toggleDataParsing(bool b) {

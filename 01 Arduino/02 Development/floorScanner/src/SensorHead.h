@@ -12,11 +12,13 @@
 #ifndef SENSORHEAD_H
 #define SENSORHEAD_H
 
+#define DEBUG_SENSOR false
+
 #include <Arduino.h>
 
 class SensorHead {
 	public:
-		SensorHead(uint8_t _sensorPin, uint8_t _ledPin);
+		SensorHead(uint8_t sensorPin, uint8_t ledPin);
 
 		void update();
 		void read();

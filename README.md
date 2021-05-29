@@ -6,12 +6,37 @@
 </p>
 
 # floorScanners
-Repository for the source code of an ongoing sound installation and performance.
+Repository for the source code of an ongoing sound installation and performance. It was first presented at Resonate Festival in 2016 in its prototyped Version we called "Fine Tuning of Marble".
 
-### Dependencies (as of now)
+
+## Overview
+* [Dependencies](#dependencies)
+* [About](#about)
+* [Classes](#classes)
+* [Authors](#authors)
+
+---
+
+### About
+tbd
+
+### Dependencies
 * [Automatic Orchestra Library](https://github.com/automatic-orchestra/ao_library)
 * [AccelStepper Library, v1.51](http://www.airspayce.com/mikem/arduino/AccelStepper/)
 * [MIDI, v3.2](https://www.pjrc.com/teensy/td_libs_MIDI.html)
+
+
+### Classes
+| Classname         | Description                                   | No. of Methods    | Current working state |
+|-------------------|-----------------------------------------------|-------------------|-----------------------|
+| StateMachine      | Organize States of a floorScanner             | 4/4               | Working               |
+| Clock             | Synchronize Scanners with a pulse             | N/A               | Deprecated (?)        |
+| Motor             | Control Stepper Motor / Acceleration et al    | 11/11             | Working               |
+| Score             | -                                             | N/A               | Deprecated (?)        |
+| SensorHead        | Reading and storing sensordata on a circle    | 4/7               | Working               |
+| Synth             | Synth output over speakers. Adjust timber etc | N/A               | Not working yet       |
+| Communication     | Communication between Scanners over MIDI      | N/A               | Not working yet       |
+
 
 ### Authors
 Copyright (c) 2016 – 2021 The Fine Tuning of Marble

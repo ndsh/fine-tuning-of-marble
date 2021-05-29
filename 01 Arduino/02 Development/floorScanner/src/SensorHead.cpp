@@ -11,6 +11,12 @@
 
 #include "SensorHead.h"
 
+/*
+	· · · · · · · · · · · · · · · · · · · · ·
+		PUBLIC
+	· · · · · · · · · · · · · · · · · · · · ·
+*/
+
 SensorHead::SensorHead(uint8_t _sensorPin, uint8_t _ledPin) {
 	pinMode(sensorPin, INPUT);
 	pinMode(ledPin, OUTPUT);
@@ -30,3 +36,9 @@ void SensorHead::toggleLED(bool b) {
 void SensorHead::toggleDataParsing(bool b) {
 	isParsing = b;
 }
+
+/*
+	· · · · · · · · · · · · · · · · · · · · ·
+		PRIVATE
+	· · · · · · · · · · · · · · · · · · · · ·
+*/

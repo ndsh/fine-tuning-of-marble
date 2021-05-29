@@ -31,8 +31,9 @@ tbd
 ---
 
 ### Classes
-<font size="1">
-	
+
+	These are the primary classes of the floorScanners living inside the /src/ folder
+
 | Classname         | Description                                   | No. of Methods    | Current working state |
 |-------------------|-----------------------------------------------|-------------------|-----------------------|
 | StateMachine      | Organize States of a floorScanner             | 4/4               | Working               |
@@ -44,7 +45,15 @@ tbd
 | Communication     | Communication between Scanners over MIDI      | N/A               | Not working yet       |
 | MacAddress        | Returns a Teensy MacAddress                   | 2/2               | Working               |
 
-</font>
+
+	These are secondary classes from the [Automatic Orchestra Library](https://github.com/automatic-orchestra/ao_library)
+	They have been copied over from the latest release and are basically version frozen as of now
+
+| Classname         | Description                                   | No. of Methods    | Current working state |
+|-------------------|-----------------------------------------------|-------------------|-----------------------|
+| CFOSynthesizer    | CheapFatOpen Synth parts to control the DAC   | ?                 | Working               |
+| CFOMidi           | Send/Receive MIDI on the Teensy               | ?                 | Working               |
+
 
 ---
 

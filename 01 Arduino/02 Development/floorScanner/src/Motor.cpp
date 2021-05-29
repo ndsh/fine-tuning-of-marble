@@ -125,6 +125,7 @@ long Motor::getCurrentAbsolutePosition() {
 	long currentRelativePos = stepper->currentPosition();
 	int currentRevolutions;
 	long absolutePos;
+	
 	if (currentRelativePos < 0) {
 		currentRevolutions = abs(floor(currentRelativePos / fullRev));
 		absolutePos = currentRelativePos + (fullRev * currentRevolutions);

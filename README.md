@@ -46,6 +46,7 @@ These are the primary classes of the floorScanners living inside the /src/ folde
 | MacAddress        | Returns a Teensy MacAddress                   | 2/2               | Working               |
 
 <br>
+
 These are secondary classes from the [Automatic Orchestra Library](https://github.com/automatic-orchestra/ao_library) and live inside the /ao/ folder
 They have been copied over from the latest release and are basically version frozen as of now
 

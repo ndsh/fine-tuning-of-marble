@@ -13,6 +13,7 @@ Repository for the source code of an ongoing sound installation and performance.
 * [Dependencies](#dependencies)
 * [About](#about)
 * [Classes](#classes)
+* [PCB](#pcb)
 * [Authors](#authors)
 
 ---
@@ -38,9 +39,20 @@ tbd
 | Communication     | Communication between Scanners over MIDI      | N/A               | Not working yet       |
 | MacAddress        | Returns a Teensy MacAddress                   | 2/2               | Working               |
 
+### PCB
+Revisions
+[ ] Redesign the PCB stack into a single square board
+[ ] DRV8825 M0, M1, M2 to Pins
+[ ] Integrate TDA2030 circuit
+[ ] Switch terminal blocks with WAGO 2060 SMD
+[ ] Integrate PROTOSEQ circuit
+[ ] Expose all available pins
+[ ] Re-examine the audio interface between PROTOSEQ and TDA2030 (Is it really necessary to have the TDA2030?)
 
-### Authors
-Copyright (c) 2016 – 2021 (The Fine Tuning of Marble / floorScanners)
-* [Irena Kukric](https://www.irenakukric.com)
-* [Luiz Zanotello](https://www.luizzanotello.com)
-* [Julian Hespenheide](https://www.julian-h.de)
+---
+
+#### Authors
+	Copyright (c) 2016 – 2021 (The Fine Tuning of Marble / floorScanners)
+	* [Irena Kukric](https://www.irenakukric.com)
+	* [Luiz Zanotello](https://www.luizzanotello.com)
+	* [Julian Hespenheide](https://www.julian-h.de)

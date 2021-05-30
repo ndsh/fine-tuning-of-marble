@@ -31,6 +31,12 @@ void setup() {
   digitalWrite(ONBOARD_LED_PIN, HIGH);
   delay(1000);
 
+  #if DEBUG
+    Serial.begin(57600);
+    Serial.println("~floorScanner: INIT");
+    Serial.println();
+  #endif
+
   stateMachine = new StateMachine(SENSOR_PIN, LED_PIN, MOTOR_DIR_PIN, MOTOR_STEP_PIN, STARTBUTTON_PIN, ONBOARD_LED_PIN, FULLREV);
 }
 

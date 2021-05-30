@@ -1,12 +1,12 @@
 /*
+    · · · · · · · · · · · · · · · · · · · · ·
 
-    ./~     Synth.h
-    ./~     Copyright (c) 2016 The Fine Tuning of Marble
+    Synth.h
+    https://github.com/ndsh/floorScanners
 
+    Copyright (c) 2016 - 2021
 
-    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
+    · · · · · · · · · · · · · · · · · · · · ·
 */
 
 #ifndef SYNTH_H

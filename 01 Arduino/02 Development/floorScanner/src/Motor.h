@@ -16,17 +16,17 @@
       Motor - usage examples
 
       # Rotate two times, in half of constant speed, clockwise
-      · Motor->setConstantSpeed(0.5);
-      · Motor->rotate(2,1);
+      · motor->setConstantSpeed(0.5);
+      · motor->rotate(2,1);
 
       # Rotate two times, with acceleration, half ramp both IN and OUT, full max speed
-      · Motor->setAccelSpeed(0.5,0.5,1);
-      · Motor->rotate(2,1);
+      · motor->setAccelSpeed(0.5,0.5,1);
+      · motor->rotate(2,1);
 
       # Run to an absolute position, clockwise, with acceleration, half ramp both IN and OUT,
         full max speed, no extra revolutions
-      · Motor->setAccelSpeed(0.5,0.5,1);
-      · Motor->runTo(40000,1,0);
+      · motor->setAccelSpeed(0.5,0.5,1);
+      · motor->runTo(40000,1,0);
 
       · · · · · · · · · · · · · · · · · · · · ·
 */
@@ -35,9 +35,9 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#define MAXSPEED 18000
+#define MAXSPEED 1800 // 18000 previous
 #define MINSPEED 200
-#define DEBUG_MOTOR false
+#define DEBUG_MOTOR true
 
 #include <AccelStepper.h>
 
@@ -55,6 +55,7 @@ class Motor {
 
     void update();
     void rotate(float times, int direction);
+    void rotateDegrees();
     void runTo(long relativePos, int direction, int rotations);
     void stop();
     void setConstantSpeed(float speedFactor);

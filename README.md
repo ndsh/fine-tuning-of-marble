@@ -46,7 +46,7 @@ These are the primary classes of the floorScanners living inside the /src/ folde
 
 <br>
 
-These are secondary classes from the [Automatic Orchestra Library](https://github.com/automatic-orchestra/ao_library) and live inside the /ao/ folder
+These are secondary classes from the [Automatic Orchestra Library](https://github.com/automatic-orchestra/ao_library) and live next to the primary classes in the /src/ folder.
 They have been copied over from the latest release and are basically version frozen as of now
 
 | Classname         | Description                                   | No. of Methods    | Current working state |

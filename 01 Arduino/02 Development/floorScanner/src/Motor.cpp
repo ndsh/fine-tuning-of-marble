@@ -11,13 +11,11 @@
 
 #include "Motor.h"
 
-/*
-	· · · · · · · · · · · · · · · · · · · · ·
-		PUBLIC
-	· · · · · · · · · · · · · · · · · · · · ·
-*/
-
 Motor::Motor(int stepPin, int dirPin, long fullRevolution) {
+	#if DEBUG_MOTOR
+		Serial.println("~Motor: created");
+	#endif
+
 	stepper = new AccelStepper(AccelStepper::FULL2WIRE, stepPin, dirPin);
 	stepper->setMaxSpeed(MAXSPEED);
 	stepper->setSpeed(0);
@@ -40,7 +38,7 @@ void Motor::update() {
 
 // Rotate the motor to times * full revolution.
 // Direction = -1 counterclockwise, 1 clockwise
-void Motor::rotate(float rotations,int direction) {
+void Motor::rotate(float rotations, int direction) {
 	lastPos = stepper->currentPosition();
 	targetPos = lastPos + (fullRev * rotations * direction);
 	targetDistance = getAbsoluteDistance(lastPos,targetPos);

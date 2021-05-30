@@ -55,7 +55,7 @@ void setup() {
 void loop() {
   
   int val = analogRead(SENSOR_PIN);
-  val = random(0, 1023);
+  //val = random(0, 1023);
  
   
   int mapped = map(val, 0, 1023, 20, 64);

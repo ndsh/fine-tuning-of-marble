@@ -1,23 +1,21 @@
 /*
+    · · · · · · · · · · · · · · · · · · · · ·
 
-    ./~     Synth.cpp
-    ./~     Copyright (c) 2016 The Fine Tuning of Marble
+    Synth.cpp
+    https://github.com/ndsh/floorScanners
 
+    Copyright (c) 2016 - 2021
 
-    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
+    · · · · · · · · · · · · · · · · · · · · ·
 */
 
 #include "Synth.h"
 
-/*
-	· · · · · · · · · · · · · · · · · · · · ·
-		PUBLIC
-	· · · · · · · · · · · · · · · · · · · · ·
-*/
-
 Synth::Synth() {
+	#if DEBUG_SYNTH
+		Serial.println("~Synth: created");
+	#endif
+
 	Music.init();
 	Music.enableEnvelope1();
 	Music.enableEnvelope2();
@@ -34,7 +32,7 @@ void Synth::applyPreset() {
 		23, 0, 0, 0, 50, 1, 127, 0, 121, 3, 0, 64, 64, 127, 9, 40, 0, 2, 0, 0, 0, 64, 63, 127, 4, 0, 0, 0, 0, 0, 0, 64, 61, 127, 4, 12, 0, 1, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 127, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 127, 127, 127, 127, 0, 0, 0, 0, 0, 1, 127, 127, 0, 127
 	};
 	for (uint8_t i = 2; i < 128; i++) {
-		Midi.controller(0, i, presetArray[i]);
+		//Midi.controller(0, i, presetArray[i]);
 	}
 }
 
@@ -73,18 +71,22 @@ void Synth::playNote() {
 }
 
 void Synth::startupTune() {
-	Music.noteOn(69, 127);
-	delay(200);
+	
+	for(int i = 0; i<4; i++) {
+		Music.noteOn(72, 127);
+		delay(100);
+		Music.noteOff(72);
 
-	Music.noteOn(67, 127);
-	delay(200);
+		Music.noteOn(76, 127);
+		delay(20);
+		
 
-	Music.noteOn(76, 127);
-	delay(200);
-
-	Music.noteOn(69, 127);
-	delay(10);
-	Music.noteOff(69);
+		Music.noteOn(81, 127);
+		delay(200);
+		Music.noteOff(76);
+		Music.noteOff(81);
+	}
+	
 
 	//Windows xp
 	/*

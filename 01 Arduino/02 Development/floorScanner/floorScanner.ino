@@ -18,10 +18,10 @@
 #define ONBOARD_LED_PIN 13
 #define STARTBUTTON_PIN 6
 
-#define SCORE 0 //Score in play
-#define PULSE_INTERVAL 50 //In milliseconds
-#define TOTALPODS 7 //Total number of PODs in play
-#define FULLREV 230400 //9:1 25600
+#define SCORE 0               //Score in play
+#define PULSE_INTERVAL 50     //In milliseconds
+#define TOTALPODS 7           //Total number of PODs in play
+#define FULLREV 230400        //9:1 25600
 #define DEBUG true
 
 StateMachine* stateMachine;

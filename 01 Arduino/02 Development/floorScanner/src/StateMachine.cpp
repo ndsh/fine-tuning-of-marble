@@ -9,6 +9,17 @@
     · · · · · · · · · · · · · · · · · · · · ·
 */
 
+/*
+	state ideas:
+		scanning the circle in fullstep (200 steps), beep everytime with a new scan
+		make a full rev
+		scanning the circle in halfsteps (400 steps), beep everytime with a new scan
+		make a full rev
+		scanning the circle in 1/4 microsteps (800), , beep everytime with a new scan
+		make a full rev
+
+*/
+
 #include "StateMachine.h"
 
 StateMachine::StateMachine(uint8_t sensorPin, uint8_t ledPin, uint8_t motorDirPin, uint8_t motorStepPin, uint8_t startButtonPin, uint8_t onboardLedPin, long fullRevolution) {

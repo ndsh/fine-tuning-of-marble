@@ -28,9 +28,9 @@ class Synth {
 
     private:
         void startupTune();
-        uint8_t note; //current note that will be played when playNote() is called
-        uint8_t lastNote; //for keeping track of the last note played
-        uint8_t noteVelocity; //note velocity
+        uint8_t note;
+        uint8_t lastNote;
+        uint8_t noteVelocity;
 };
 
 #endif

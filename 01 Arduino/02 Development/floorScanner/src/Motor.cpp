@@ -11,12 +11,12 @@
 
 #include "Motor.h"
 
-Motor::Motor(int stepPin, int dirPin, long fullRevolution) {
+Motor::Motor(int _stepPin, int _dirPin, long fullRevolution) {
 	#if DEBUG_MOTOR
 		Serial.println("~Motor: created");
 	#endif
 
-	stepper = new AccelStepper(AccelStepper::FULL2WIRE, stepPin, dirPin);
+	stepper = new AccelStepper(AccelStepper::FULL2WIRE, _stepPin, _dirPin);
 	stepper->setMaxSpeed(MAXSPEED);
 	stepper->setSpeed(0);
 	stepper->setCurrentPosition(0);
@@ -28,6 +28,8 @@ Motor::Motor(int stepPin, int dirPin, long fullRevolution) {
 	isConstant = false;
 	counter = 0;
   	fullRev = fullRevolution;
+  	stepPin = _stepPin;
+  	dirPin = _dirPin;
 }
 
 void Motor::update() {
@@ -172,6 +174,10 @@ void Motor::updateCounter() {
 		Serial.print("~Motor::updateCounter()-› ");
 		Serial.println(counter);
 	#endif
+}
+
+void setMicrostepping(uint8_t m0, uint8_t m1, uint8_t m2) {
+	//digitalWrite();
 }
 
 /*
